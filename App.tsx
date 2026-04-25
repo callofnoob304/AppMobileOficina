@@ -1,10 +1,11 @@
-import { Text, View } from "react-native";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import Routes from "./src/navigation/routes";
 import React from "react";
 
 export default function App() {
-  return (
-	<View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-	  <Text>App mobile oficina mecanica</Text>
-	</View>
-  );
+	return (
+		<SafeAreaProvider>
+			<Routes/>
+		</SafeAreaProvider>
+	);
 }

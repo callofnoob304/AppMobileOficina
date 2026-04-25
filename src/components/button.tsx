@@ -1,5 +1,5 @@
 import { TouchableOpacity, TouchableOpacityProps } from "react-native";
-import Label from "./Label";
+import Label from "./label";
 import React from "react";
 
 interface ButtonProps extends TouchableOpacityProps {

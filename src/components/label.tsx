@@ -4,7 +4,7 @@ import React from "react";
 interface LabelProps extends TextProps {
 	center?: boolean;
 	linha?: boolean;
-	title?: string;
+	title: string;
 	label?: string;
 }
 
