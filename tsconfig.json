@@ -7,9 +7,9 @@
 		],
 		"baseUrl": ".",
 		"paths": {
-			"_components": [
-				"src/components/index"
-			]
+			"@components": [
+				"src/components"
+			],
 		}
 	},
 	"include": [
