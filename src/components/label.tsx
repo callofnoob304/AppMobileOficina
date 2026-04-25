@@ -1,33 +1,54 @@
-import { Text, TextProps, View } from "react-native";
+import { Text, TextProps, View, StyleSheet, ViewStyle } from "react-native";
 import React from "react";
 
 interface LabelProps extends TextProps {
 	center?: boolean;
 	linha?: boolean;
-	title: string;
+	title?: string;
 	label?: string;
+	containerStyle?: ViewStyle;
 }
 
-export default ({ title, label, center, linha, ...rest }: LabelProps) => {
+export default function Label({ title, label, center, linha, style, containerStyle, ...rest }: LabelProps) {
 	return (
-		<View style={linha ? { flexDirection: "row", justifyContent: "space-between" } : { gap: 4 }}>
-			{title &&
+		<View style={[linha ? styles.row : styles.column, containerStyle]}>
+			{title && (
 				<Text
-					style={{ fontFamily: 'Inter', fontSize: 20, lineHeight: 20, fontWeight: "bold", ...(center ? { alignSelf: 'center' } : {}) }}
+					style={[styles.title, center && styles.center, style]}
 					{...rest}
 				>
 					{title}
 				</Text>
-			}
+			)}
 
-			{label &&
+			{label && (
 				<Text
-					style={{ fontFamily: 'Inter', fontSize: 20, lineHeight: 20, fontWeight: "normal", ...(center ? { alignSelf: 'center' } : {}) }}
+					style={[styles.label, center && styles.center, style]}
 					{...rest}
 				>
 					{label}
 				</Text>
-			}
-		</View >
-	)
+			)}
+		</View>
+	);
 }
+
+const styles = StyleSheet.create({
+	row: {
+		flexDirection: "row",
+		justifyContent: "space-between",
+	},
+	column: {
+		gap: 4,
+	},
+	title: {
+		fontSize: 20,
+		fontWeight: "bold",
+	},
+	label: {
+		fontSize: 16,
+	},
+	center: {
+		alignSelf: "center",
+	},
+});

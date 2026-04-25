@@ -1,5 +1,5 @@
 // import { NavigationProp, ParamListBase, useNavigation } from "@react-navigation/native";
-import { Container, Label } from "_components";
+import { Container, Label } from "@components";
 import React from "react";
 
 export default function Home() {
