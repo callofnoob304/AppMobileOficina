@@ -2,11 +2,11 @@ import { Text, TextProps, View, StyleSheet, ViewStyle } from "react-native";
 import React from "react";
 
 interface LabelProps extends TextProps {
+	containerStyle?: ViewStyle;
 	center?: boolean;
 	linha?: boolean;
 	title?: string;
 	label?: string;
-	containerStyle?: ViewStyle;
 }
 
 export default function Label({ title, label, center, linha, style, containerStyle, ...rest }: LabelProps) {

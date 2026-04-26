@@ -1,6 +1,6 @@
 import { TouchableOpacity, TouchableOpacityProps, StyleSheet } from "react-native";
-import React from "react";
 import Label from "./label";
+import React from "react";
 
 interface ButtonProps extends TouchableOpacityProps {
 	bgColor?: string;
@@ -24,6 +24,6 @@ const styles = StyleSheet.create({
 		width: "100%",
 		padding: 12,
 		borderRadius: 24,
-		backgroundColor: "#3B82F6", // cor padrão
+		backgroundColor: "#3B82F6",
 	},
 });
