@@ -2,14 +2,14 @@ import { NavigationProp, ParamListBase, useNavigation } from "@react-navigation/
 import { Button, Container, Label } from "@components";
 import React from "react";
 
-export default function Home() {
+export default function OrcamentoServicos() {
 	const navigator: NavigationProp<ParamListBase> = useNavigation();
 
 	return (
 		<Container>
-			<Label title={"Tela inicial"} />
+			<Label title={"Serviços e peças"} />
 
-			<Button title={"Novo orçamento"} onPress={() => navigator.navigate('OrcamentoClienteVeiculo')}/>
+			<Button title={"Avançar"} onPress={() => navigator.navigate('OrcamentoResumo')}/>
 		</Container>
 	);
 }
