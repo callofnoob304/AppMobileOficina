@@ -15,7 +15,7 @@ const Tab = createBottomTabNavigator();
 
 function HomeStack() {
 	return (
-		<Stack.Navigator screenOptions={{ headerShown: false }}>
+		<Stack.Navigator initialRouteName="Home" screenOptions={{ headerShown: false }}>
 			<Stack.Screen name="OrcamentoClienteVeiculo" component={OrcamentoClienteVeiculo} />
 			<Stack.Screen name="OrcamentoServicos" component={OrcamentoServicos} />
 			<Stack.Screen name="OrcamentoResumo" component={OrcamentoResumo} />
