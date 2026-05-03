@@ -1,20 +1,25 @@
-import { View, ViewProps, StyleSheet } from "react-native";
+import { ScrollView, ScrollViewProps, StyleSheet } from "react-native";
 import React from "react";
 
-type Props = ViewProps & {
+type Props = ScrollViewProps & {
 	children?: React.ReactNode;
 };
 
 export default function Content({ children, style, ...rest }: Props) {
 	return (
-		<View style={[styles.content, style]} {...rest}>
+		<ScrollView
+			contentContainerStyle={[styles.content, style]}
+			keyboardShouldPersistTaps="handled"
+			showsVerticalScrollIndicator={false}
+			{...rest}
+		>
 			{children}
-		</View>
+		</ScrollView>
 	);
 }
 
 const styles = StyleSheet.create({
 	content: {
-		flex: 1,
+		flexGrow: 1,
 	},
 });
