@@ -1,15 +1,17 @@
 import { Text, TextProps, View, StyleSheet, ViewStyle } from "react-native";
+import { colors } from "../styles/colors";
 import React from "react";
 
 interface LabelProps extends TextProps {
 	containerStyle?: ViewStyle;
 	center?: boolean;
 	linha?: boolean;
+	muted?: boolean;
 	title?: string;
 	label?: string;
 }
 
-export default function Label({ title, label, center, linha, style, containerStyle, ...rest }: LabelProps) {
+export default function Label({ title, label, center, linha, muted, style, containerStyle, ...rest }: LabelProps) {
 	return (
 		<View style={[linha ? styles.row : styles.column, containerStyle]}>
 			{title && (
@@ -23,7 +25,7 @@ export default function Label({ title, label, center, linha, style, containerSty
 
 			{label && (
 				<Text
-					style={[styles.label, center && styles.center, style]}
+					style={[styles.label, muted && styles.muted, center && styles.center, style]}
 					{...rest}
 				>
 					{label}
@@ -37,6 +39,7 @@ const styles = StyleSheet.create({
 	row: {
 		flexDirection: "row",
 		justifyContent: "space-between",
+		alignItems: "center",
 	},
 	column: {
 		gap: 4,
@@ -44,11 +47,17 @@ const styles = StyleSheet.create({
 	title: {
 		fontSize: 20,
 		fontWeight: "bold",
+		color: colors.text.primary,
 	},
 	label: {
 		fontSize: 16,
+		color: colors.text.primary,
+	},
+	muted: {
+		color: colors.text.secondary,
 	},
 	center: {
 		alignSelf: "center",
+		textAlign: "center",
 	},
 });

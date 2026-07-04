@@ -1,12 +1,12 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Orcamento } from '../types/orcamento';
+import { DadosOficina } from '../types/oficina';
 
 // Define todas as chaves possíveis e seus tipos
 export type StorageKeyType = {
-	// aqui vai as chaves e seus tipos, por exemplo:
-	// userToken: string;
-	// userPreferences: {
-	// 	theme: 'light' | 'dark';
-	// };
+	orcamentos: Orcamento[];
+	ultimoNumero: number;
+	oficina: DadosOficina;
 };
 
 // Função auxiliar para padronizar o caminho da chave

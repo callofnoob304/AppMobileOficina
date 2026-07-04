@@ -1,110 +1,154 @@
-import { NavigationProp, ParamListBase, useNavigation, useRoute } from "@react-navigation/native";
-import { Button, Container, Content, Input, Label } from "@components";
+import { NavigationProp, RouteProp, useNavigation, useRoute } from "@react-navigation/native";
+import { Button, Container, Content, Input, Label, Card, ScreenHeader, StepIndicator } from "@components";
+import { FlatList, KeyboardAvoidingView, Platform, TouchableOpacity, View, Alert, StyleSheet } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { FlatList, KeyboardAvoidingView, Platform, TouchableOpacity, View } from "react-native";
+import { OrcamentoStackParamList } from "src/navigation/types";
+import { OrcamentoItem } from "src/types/orcamento";
+import { calcularTotal } from "src/services/orcamentoService";
+import { formatBRL, parseValor } from "src/utils/format";
+import { colors } from "src/styles/colors";
 import React from "react";
 
-interface Params {
-	telefone: string;
-	cliente: string;
-	cpfCnpj: string;
-	veiculo: string;
-	modelo: string;
-	placa: string;
-	ano: string;
-	km: string;
-}
-
 export default function OrcamentoServicos() {
-	const navigator: NavigationProp<ParamListBase> = useNavigation();
-	const { telefone, cliente, cpfCnpj, veiculo, modelo, ano, placa, km } = useRoute().params as Params;
+	const navigator = useNavigation<NavigationProp<OrcamentoStackParamList>>();
+	const { cliente, veiculo } = useRoute<RouteProp<OrcamentoStackParamList, "OrcamentoServicos">>().params;
 
 	const [quantidade, setQuantidade] = React.useState('');
-	const [itens, setItens] = React.useState<any[]>([]);
+	const [itens, setItens] = React.useState<OrcamentoItem[]>([]);
 	const [valor, setValor] = React.useState('');
-	const [item, setItem] = React.useState('');
+	const [descricao, setDescricao] = React.useState('');
 
 	const adicionarItem = () => {
-		if (!item || !quantidade || !valor) return;
+		const qtd = quantidade ? Number(quantidade) : 1;
+		const vlr = parseValor(valor);
 
-		const novoItem = {
-			id: Date.now(),
-			item,
-			quantidade: Number(quantidade),
-			valor: Number(valor)
+		if (!descricao.trim()) {
+			Alert.alert("Descrição obrigatória", "Informe o serviço ou peça.");
+			return;
+		}
+		if (vlr <= 0) {
+			Alert.alert("Valor inválido", "Informe um valor maior que zero.");
+			return;
+		}
+
+		const novoItem: OrcamentoItem = {
+			id: `${Date.now()}`,
+			descricao: descricao.trim(),
+			quantidade: qtd > 0 ? qtd : 1,
+			valorUnitario: vlr,
 		};
 
 		setItens(prev => [...prev, novoItem]);
-
-		setItem('');
+		setDescricao('');
 		setQuantidade('');
 		setValor('');
 	};
 
-	const total = itens.reduce((acc, i) => {
-		return acc + (i.quantidade * i.valor);
-	}, 0);
+	const removerItem = (id: string) => {
+		setItens(prev => prev.filter(i => i.id !== id));
+	};
 
-	const renderItem = ({ item }: any) => (
-		<View style={{ flexDirection: 'row', alignItems: 'center', borderBottomWidth: 1, paddingVertical: 8 }} >
-			<Label label={item.item} style={{ width: COL_ITEM, flexWrap: 'wrap' }} />
-			<Label label={`${item.quantidade}x`} style={{ width: COL_QTD, textAlign: 'right' }} />
-			<Label label={`R$ ${item.valor.toFixed(2)}`} style={{ width: COL_VALOR, textAlign: 'right' }} />
-			<Label label={`R$ ${(item.quantidade * item.valor).toFixed(2)}`} style={{ width: COL_TOTAL, textAlign: 'right' }} />
+	const total = calcularTotal(itens);
+
+	function avancar() {
+		if (itens.length === 0) {
+			Alert.alert("Adicione itens", "Inclua ao menos um serviço ou peça no orçamento.");
+			return;
+		}
+		navigator.navigate('OrcamentoResumo', { cliente, veiculo, itens });
+	}
+
+	const renderItem = ({ item }: { item: OrcamentoItem }) => (
+		<View style={styles.row}>
+			<View style={{ flex: 1 }}>
+				<Label label={item.descricao} />
+				<Label muted label={`${item.quantidade} × ${formatBRL(item.valorUnitario)}`} style={{ fontSize: 13 }} />
+			</View>
+			<Label label={formatBRL(item.quantidade * item.valorUnitario)} style={{ fontWeight: "700" }} />
+			<TouchableOpacity onPress={() => removerItem(item.id)} hitSlop={8} style={{ marginLeft: 12 }}>
+				<Icon name="trash-can-outline" size={22} color={colors.red[400]} />
+			</TouchableOpacity>
 		</View>
 	);
 
-	const COL_ITEM = 120;
-	const COL_QTD = 50;
-	const COL_VALOR = 90;
-	const COL_TOTAL = 100;
-
 	return (
-		<KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? "padding" : 'height'}>
-			<Container>
-				<Content style={{ gap: 40, paddingBottom: 100 }}>
-					<Label title={"Adicione os serviços e peças ao orçamento!"} />
+		<SafeAreaView style={{ flex: 1, backgroundColor: colors.background }} edges={['top']}>
+			<KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? "padding" : undefined}>
+				<Container>
+					<ScreenHeader title="Serviços e peças" subtitle="Etapa 2 · Itens do orçamento" onBack={() => navigator.goBack()} />
+					<StepIndicator current={2} total={3} labels={["Dados", "Serviços", "Resumo"]} />
 
-					<View style={{ gap: 8 }}>
-						<Label label={"Serviço/Peça"} />
-
-						<Input style={{ flex: 2 }} placeholder="Item" value={item} onChangeText={setItem} />
-
-						<View style={{ gap: 8, flexDirection: 'row', alignItems: 'center' }} >
-							<Input style={{ flex: 1 }} placeholder="Qtd" keyboardType="numeric" value={quantidade} onChangeText={setQuantidade} />
-							<Input style={{ flex: 1 }} placeholder="Valor" keyboardType="numeric" value={valor} onChangeText={setValor} />
-
-							<TouchableOpacity style={{ backgroundColor: '#000', justifyContent: 'center', alignItems: 'center', paddingHorizontal: 12, borderRadius: 8, height: 56 }}
-								onPress={adicionarItem}
-							>
-								<Icon name="plus" size={28} color="#FFF" />
-							</TouchableOpacity>
-						</View>
-					</View>
-
-					<FlatList
-						data={itens}
-						keyExtractor={(item) => item.id.toString()}
-						renderItem={renderItem}
-						scrollEnabled={false}
-						ListHeaderComponent={
-							<View style={{ flexDirection: 'row', borderBottomWidth: 2, paddingBottom: 6, marginTop: 16 }} >
-								<Label label="Item" style={{ width: COL_ITEM }} />
-								<Label label="Qtd" style={{ width: COL_QTD, textAlign: 'right' }} />
-								<Label label="Vl. Unit" style={{ width: COL_VALOR, textAlign: 'right' }} />
-								<Label label="Total" style={{ width: COL_TOTAL, textAlign: 'right' }} />
+					<Content style={{ gap: 20, paddingBottom: 120 }}>
+						<Card style={{ gap: 10 }}>
+							<Label label="Adicionar item" style={{ fontWeight: "700" }} />
+							<Input placeholder="Serviço ou peça" value={descricao} onChangeText={setDescricao} />
+							<View style={{ flexDirection: 'row', gap: 8, alignItems: 'center' }}>
+								<Input style={{ flex: 1 }} placeholder="Qtd" keyboardType="number-pad" value={quantidade} onChangeText={setQuantidade} />
+								<Input style={{ flex: 1.6 }} placeholder="Valor unit." keyboardType="decimal-pad" value={valor} onChangeText={setValor} />
+								<TouchableOpacity style={styles.addButton} onPress={adicionarItem}>
+									<Icon name="plus" size={26} color={colors.text.inverse} />
+								</TouchableOpacity>
 							</View>
-						}
-						ListEmptyComponent={
-							<Label label="Nenhum item adicionado" />
-						}
-					/>
+						</Card>
 
-					<Label title={`Total: R$ ${total.toFixed(2)}`} />
-				</Content>
+						<View>
+							<Label label={`Itens (${itens.length})`} style={{ fontWeight: "700", marginBottom: 8 }} />
+							<FlatList
+								data={itens}
+								keyExtractor={(item) => item.id}
+								renderItem={renderItem}
+								scrollEnabled={false}
+								ListEmptyComponent={
+									<View style={styles.empty}>
+										<Icon name="clipboard-text-outline" size={32} color={colors.text.muted} />
+										<Label muted label="Nenhum item adicionado" />
+									</View>
+								}
+							/>
+						</View>
+					</Content>
 
-				<Button title={"Avançar"} onPress={() => navigator.navigate('OrcamentoResumo')} />
-			</Container>
-		</KeyboardAvoidingView>
+					<View style={styles.footer}>
+						<View style={styles.totalRow}>
+							<Label muted label="Total do orçamento" />
+							<Label title={formatBRL(total)} style={{ color: colors.yellow[400] }} />
+						</View>
+						<Button title="Avançar" onPress={avancar} disabled={itens.length === 0} />
+					</View>
+				</Container>
+			</KeyboardAvoidingView>
+		</SafeAreaView>
 	);
 }
+
+const styles = StyleSheet.create({
+	row: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		paddingVertical: 12,
+		borderBottomWidth: 1,
+		borderBottomColor: colors.border,
+	},
+	addButton: {
+		backgroundColor: colors.yellow[400],
+		justifyContent: 'center',
+		alignItems: 'center',
+		width: 52,
+		height: 52,
+		borderRadius: 12,
+	},
+	empty: {
+		alignItems: 'center',
+		gap: 8,
+		paddingVertical: 24,
+	},
+	footer: {
+		gap: 12,
+	},
+	totalRow: {
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		alignItems: 'center',
+	},
+});
