@@ -1,0 +1,229 @@
+import { generatePDF } from "react-native-html-to-pdf";
+import Share from "react-native-share";
+import { Orcamento } from "../types/orcamento";
+import { DadosOficina, OFICINA_PADRAO } from "../types/oficina";
+import { StorageService } from "./storageService";
+import { formatBRL, formatDataHora, diasRestantes } from "../utils/format";
+
+// Geração e compartilhamento do orçamento em PDF.
+
+function escapeHtml(texto?: string): string {
+  if (!texto) return "";
+  return texto
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+function linhaInfo(label: string, valor?: string): string {
+  if (!valor) return "";
+  return `
+    <tr>
+      <td class="info-label">${escapeHtml(label)}</td>
+      <td class="info-valor">${escapeHtml(valor)}</td>
+    </tr>
+  `;
+}
+
+function montarHtml(orcamento: Orcamento, oficina: DadosOficina): string {
+  const dias = diasRestantes(orcamento.criadoEm);
+  const validadeTexto = dias > 0 ? `Válido por mais ${dias} dia${dias > 1 ? "s" : ""}` : "Expira hoje";
+
+  const itensHtml = orcamento.itens
+    .map(
+      (item) => `
+        <tr>
+          <td>${escapeHtml(item.descricao)}</td>
+          <td class="center">${item.quantidade}</td>
+          <td class="right">${formatBRL(item.valorUnitario)}</td>
+          <td class="right">${formatBRL(item.quantidade * item.valorUnitario)}</td>
+        </tr>
+      `
+    )
+    .join("");
+
+  return `
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <meta charset="utf-8" />
+        <style>
+          * { box-sizing: border-box; }
+          body {
+            font-family: -apple-system, Helvetica, Arial, sans-serif;
+            color: #1A1A1A;
+            padding: 24px;
+            margin: 0;
+          }
+          .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            border-bottom: 4px solid #F2B705;
+            padding-bottom: 16px;
+            margin-bottom: 20px;
+          }
+          .oficina-nome {
+            font-size: 20px;
+            font-weight: 700;
+            margin: 0 0 4px 0;
+          }
+          .oficina-dado {
+            font-size: 12px;
+            color: #555;
+            margin: 0;
+          }
+          .orcamento-numero {
+            font-size: 22px;
+            font-weight: 700;
+            color: #B8262B;
+            text-align: right;
+            margin: 0;
+          }
+          .orcamento-data {
+            font-size: 12px;
+            color: #555;
+            text-align: right;
+            margin: 2px 0 0 0;
+          }
+          .validade {
+            font-size: 12px;
+            color: #8A6D00;
+            text-align: right;
+            margin: 4px 0 0 0;
+          }
+          .secao-titulo {
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 20px 0 8px 0;
+            color: #1A1A1A;
+            border-left: 4px solid #F2B705;
+            padding-left: 8px;
+          }
+          table.info { width: 100%; border-collapse: collapse; }
+          .info-label { font-size: 12px; color: #777; padding: 3px 0; width: 35%; }
+          .info-valor { font-size: 13px; color: #1A1A1A; padding: 3px 0; font-weight: 600; }
+          table.itens { width: 100%; border-collapse: collapse; margin-top: 6px; }
+          table.itens th {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: #777;
+            text-align: left;
+            border-bottom: 2px solid #DDD;
+            padding: 6px 4px;
+          }
+          table.itens td {
+            font-size: 13px;
+            padding: 8px 4px;
+            border-bottom: 1px solid #EEE;
+          }
+          .center { text-align: center; }
+          .right { text-align: right; }
+          .total-row {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 12px;
+            margin-top: 16px;
+            padding-top: 12px;
+            border-top: 2px solid #1A1A1A;
+          }
+          .total-label { font-size: 14px; font-weight: 700; }
+          .total-valor { font-size: 22px; font-weight: 700; color: #B8262B; }
+          .footer {
+            margin-top: 32px;
+            font-size: 11px;
+            color: #999;
+            text-align: center;
+          }
+        </style>
+      </head>
+      <body>
+        <div class="header">
+          <div>
+            <p class="oficina-nome">${escapeHtml(oficina.nome)}</p>
+            ${oficina.responsavel ? `<p class="oficina-dado">${escapeHtml(oficina.responsavel)}</p>` : ""}
+            ${oficina.telefone ? `<p class="oficina-dado">Tel: ${escapeHtml(oficina.telefone)}</p>` : ""}
+            ${oficina.endereco ? `<p class="oficina-dado">${escapeHtml(oficina.endereco)}</p>` : ""}
+            ${oficina.cnpj ? `<p class="oficina-dado">CNPJ: ${escapeHtml(oficina.cnpj)}</p>` : ""}
+          </div>
+          <div>
+            <p class="orcamento-numero">Orçamento Nº ${orcamento.numero}</p>
+            <p class="orcamento-data">${escapeHtml(formatDataHora(orcamento.criadoEm))}</p>
+            <p class="validade">${validadeTexto}</p>
+          </div>
+        </div>
+
+        <div class="secao-titulo">Cliente</div>
+        <table class="info">
+          ${linhaInfo("Nome", orcamento.cliente.nome)}
+          ${linhaInfo("Telefone", orcamento.cliente.telefone)}
+          ${linhaInfo("CPF/CNPJ", orcamento.cliente.cpfCnpj)}
+        </table>
+
+        <div class="secao-titulo">Veículo</div>
+        <table class="info">
+          ${linhaInfo("Veículo", orcamento.veiculo.nome)}
+          ${linhaInfo("Modelo", orcamento.veiculo.modelo)}
+          ${linhaInfo("Ano", orcamento.veiculo.ano)}
+          ${linhaInfo("Placa", orcamento.veiculo.placa)}
+          ${linhaInfo("Km", orcamento.veiculo.km)}
+        </table>
+
+        <div class="secao-titulo">Serviços e peças</div>
+        <table class="itens">
+          <thead>
+            <tr>
+              <th>Descrição</th>
+              <th class="center">Qtd</th>
+              <th class="right">Valor unit.</th>
+              <th class="right">Subtotal</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${itensHtml}
+          </tbody>
+        </table>
+
+        <div class="total-row">
+          <span class="total-label">TOTAL</span>
+          <span class="total-valor">${formatBRL(orcamento.total)}</span>
+        </div>
+
+        <p class="footer">Orçamento gerado pelo app ${escapeHtml(oficina.nome)} — sujeito a alteração sem aviso prévio.</p>
+      </body>
+    </html>
+  `;
+}
+
+export const PdfService = {
+  // Gera o PDF do orçamento e devolve o caminho do arquivo salvo.
+  async gerar(orcamento: Orcamento): Promise<string> {
+    const oficina = (await StorageService.get("oficina")) ?? OFICINA_PADRAO;
+    const html = montarHtml(orcamento, oficina);
+
+    const resultado = await generatePDF({
+      html,
+      fileName: `orcamento-${orcamento.numero}`,
+      base64: false,
+    });
+
+    return resultado.filePath;
+  },
+
+  // Gera o PDF e abre a folha de compartilhamento nativa.
+  async compartilhar(orcamento: Orcamento): Promise<void> {
+    const filePath = await this.gerar(orcamento);
+
+    await Share.open({
+      title: `Orçamento Nº ${orcamento.numero}`,
+      url: `file://${filePath}`,
+      type: "application/pdf",
+      filename: `Orcamento_${orcamento.numero}`,
+      failOnCancel: false,
+    });
+  },
+};

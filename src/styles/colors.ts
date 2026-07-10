@@ -1,25 +1,25 @@
-// Identidade visual WEIRICH — Mecânica Automotiva (preto + amarelo)
+// Identidade visual WEIRICH — Mecânica Automotiva (grafite + amarelo + vermelho)
 export const colors = {
-  black: "#0A0A0A",
-  background: "#0A0A0A",
-  surface: "#161616",
-  surfaceAlt: "#1F1F1F",
-  border: "#2A2A2A",
-  borderStrong: "#3A3A3A",
+  black: "#121212",
+  background: "#121212",
+  surface: "#1C1C1E",
+  surfaceAlt: "#242426",
+  border: "#333335",
+  borderStrong: "#45454A",
 
   // Amarelo da marca (destaques, botões, valores)
   yellow: {
-    300: "#FFDE59",
-    400: "#FFD400", // cor de destaque principal
-    500: "#F5C518",
-    600: "#D9A800",
+    300: "#FFE066",
+    400: "#FFC933", // cor de destaque principal
+    500: "#F2B705",
+    600: "#D69E00",
   },
 
   text: {
-    primary: "#FAFAFA",
-    secondary: "#B4B4B8",
-    muted: "#7A7A7E",
-    inverse: "#0A0A0A",
+    primary: "#F5F5F7",
+    secondary: "#B8B8BD",
+    muted: "#84848A",
+    inverse: "#121212",
   },
 
   // Escala neutra (mantida para compatibilidade com componentes existentes)
@@ -30,9 +30,9 @@ export const colors = {
     400: "#A1A1AA",
     500: "#71717A",
     600: "#52525B",
-    800: "#27272A",
-    900: "#18181B",
-    950: "#09090B",
+    800: "#2A2A2C",
+    900: "#1C1C1E",
+    950: "#121212",
   },
 
   green: {
@@ -40,8 +40,11 @@ export const colors = {
     500: "#16A34A",
   },
 
+  // Vermelho da marca (alertas, ações destrutivas e destaque secundário)
   red: {
-    400: "#F87171",
-    500: "#EF4444",
+    300: "#FF9A9E",
+    400: "#F65C63",
+    500: "#E5383B",
+    600: "#B8262B",
   },
 };

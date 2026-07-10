@@ -9,7 +9,7 @@ import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import { colors } from "../styles/colors";
 import Configuracoes from "../screens/configuracoes";
 import Historico from "../screens/historico";
-import Home from "../screens/Home";
+import Home from "../screens/home";
 import React from "react";
 
 const Stack = createNativeStackNavigator();

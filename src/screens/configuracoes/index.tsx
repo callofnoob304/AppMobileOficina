@@ -6,6 +6,7 @@ import { StorageService } from "src/services/storageService";
 import { DadosOficina, OFICINA_PADRAO } from "src/types/oficina";
 import { colors } from "src/styles/colors";
 import { spacing } from "src/styles/theme";
+import { isValidCpfCnpj, isValidTelefone, maskCpfCnpj, maskTelefone } from "src/utils/validators";
 import React, { useEffect, useState } from "react";
 
 export default function Configuracoes() {
@@ -24,6 +25,15 @@ export default function Configuracoes() {
 	}
 
 	async function salvar() {
+		if (dados.telefone.trim() && !isValidTelefone(dados.telefone)) {
+			Alert.alert("Telefone inválido", "Informe um telefone com DDD (10 ou 11 dígitos).");
+			return;
+		}
+		if (dados.cnpj.trim() && !isValidCpfCnpj(dados.cnpj)) {
+			Alert.alert("CNPJ inválido", "Confira o CNPJ informado.");
+			return;
+		}
+
 		await StorageService.set("oficina", dados);
 		Alert.alert("Pronto!", "Dados da oficina salvos com sucesso.");
 	}
@@ -52,9 +62,21 @@ export default function Configuracoes() {
 
 							<Input placeholder="Nome da oficina" value={dados.nome} onChangeText={(v) => atualizar("nome", v)} />
 							<Input placeholder="Responsável" value={dados.responsavel} onChangeText={(v) => atualizar("responsavel", v)} />
-							<Input placeholder="Telefone" keyboardType="phone-pad" value={dados.telefone} onChangeText={(v) => atualizar("telefone", v)} />
+							<Input
+								placeholder="Telefone"
+								keyboardType="phone-pad"
+								value={dados.telefone}
+								onChangeText={(v) => atualizar("telefone", maskTelefone(v))}
+								maxLength={15}
+							/>
 							<Input placeholder="Endereço" value={dados.endereco} onChangeText={(v) => atualizar("endereco", v)} />
-							<Input placeholder="CNPJ" keyboardType="numbers-and-punctuation" value={dados.cnpj} onChangeText={(v) => atualizar("cnpj", v)} />
+							<Input
+								placeholder="CNPJ"
+								keyboardType="numbers-and-punctuation"
+								value={dados.cnpj}
+								onChangeText={(v) => atualizar("cnpj", maskCpfCnpj(v))}
+								maxLength={18}
+							/>
 						</Card>
 					</Content>
 

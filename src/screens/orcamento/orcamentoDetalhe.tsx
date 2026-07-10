@@ -5,6 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { OrcamentoStackParamList } from "src/navigation/types";
 import { OrcamentoService } from "src/services/orcamentoService";
+import { PdfService } from "src/services/pdfService";
 import { Orcamento } from "src/types/orcamento";
 import { formatBRL, formatDataHora, diasRestantes } from "src/utils/format";
 import { colors } from "src/styles/colors";
@@ -26,6 +27,7 @@ export default function OrcamentoDetalhe() {
 
 	const [orcamento, setOrcamento] = useState<Orcamento | null>(null);
 	const [carregando, setCarregando] = useState(true);
+	const [gerandoPdf, setGerandoPdf] = useState(false);
 
 	useEffect(() => {
 		OrcamentoService.buscarPorId(id).then((o) => {
@@ -33,6 +35,18 @@ export default function OrcamentoDetalhe() {
 			setCarregando(false);
 		});
 	}, [id]);
+
+	async function compartilharPdf() {
+		if (!orcamento) return;
+		try {
+			setGerandoPdf(true);
+			await PdfService.compartilhar(orcamento);
+		} catch {
+			Alert.alert("Erro ao gerar PDF", "Não foi possível gerar ou compartilhar o orçamento. Tente novamente.");
+		} finally {
+			setGerandoPdf(false);
+		}
+	}
 
 	function excluir() {
 		Alert.alert("Excluir orçamento", "Tem certeza que deseja excluir este orçamento?", [
@@ -126,10 +140,17 @@ export default function OrcamentoDetalhe() {
 				</Content>
 
 				<Button
-					title="Compartilhar PDF (em breve)"
+					title={gerandoPdf ? "Gerando PDF..." : "Compartilhar PDF"}
 					variant="outline"
-					disabled
-					icon={<Icon name="file-pdf-box" size={20} color={colors.yellow[400]} />}
+					disabled={gerandoPdf}
+					onPress={compartilharPdf}
+					icon={
+						gerandoPdf ? (
+							<ActivityIndicator color={colors.yellow[400]} />
+						) : (
+							<Icon name="file-pdf-box" size={20} color={colors.yellow[400]} />
+						)
+					}
 				/>
 			</Container>
 		</SafeAreaView>

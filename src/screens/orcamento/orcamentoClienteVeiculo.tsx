@@ -4,6 +4,7 @@ import { View, KeyboardAvoidingView, Platform, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { OrcamentoStackParamList } from "src/navigation/types";
 import { colors } from "src/styles/colors";
+import { isValidCpfCnpj, isValidTelefone, maskCpfCnpj, maskTelefone } from "src/utils/validators";
 import React, { useState } from "react";
 
 export default function OrcamentoClienteVeiculo() {
@@ -25,6 +26,14 @@ export default function OrcamentoClienteVeiculo() {
 		}
 		if (!veiculo.trim()) {
 			Alert.alert("Informe o veículo", "Descreva o veículo para continuar.");
+			return;
+		}
+		if (telefone.trim() && !isValidTelefone(telefone)) {
+			Alert.alert("Telefone inválido", "Informe um telefone com DDD (10 ou 11 dígitos).");
+			return;
+		}
+		if (cpfCnpj.trim() && !isValidCpfCnpj(cpfCnpj)) {
+			Alert.alert("CPF/CNPJ inválido", "Confira o CPF ou CNPJ informado.");
 			return;
 		}
 
@@ -52,8 +61,20 @@ export default function OrcamentoClienteVeiculo() {
 							<Label label="Dados do cliente" style={{ fontWeight: "700" }} />
 
 							<Input placeholder="Nome do cliente *" value={cliente} onChangeText={setCliente} />
-							<Input placeholder="Telefone" keyboardType="phone-pad" value={telefone} onChangeText={setTelefone} />
-							<Input placeholder="CPF / CNPJ" keyboardType="numbers-and-punctuation" value={cpfCnpj} onChangeText={setCpfCnpj} />
+							<Input
+								placeholder="Telefone"
+								keyboardType="phone-pad"
+								value={telefone}
+								onChangeText={(v) => setTelefone(maskTelefone(v))}
+								maxLength={15}
+							/>
+							<Input
+								placeholder="CPF / CNPJ"
+								keyboardType="numbers-and-punctuation"
+								value={cpfCnpj}
+								onChangeText={(v) => setCpfCnpj(maskCpfCnpj(v))}
+								maxLength={18}
+							/>
 						</View>
 
 						<View style={{ gap: 10 }}>
