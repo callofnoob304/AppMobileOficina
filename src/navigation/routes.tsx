@@ -44,6 +44,9 @@ function HistoricoStack() {
 		<Stack.Navigator initialRouteName="Historico" screenOptions={{ headerShown: false }}>
 			<Stack.Screen name="Historico" component={Historico} />
 			<Stack.Screen name="OrcamentoDetalhe" component={OrcamentoDetalhe} />
+			<Stack.Screen name="OrcamentoClienteVeiculo" component={OrcamentoClienteVeiculo} />
+			<Stack.Screen name="OrcamentoServicos" component={OrcamentoServicos} />
+			<Stack.Screen name="OrcamentoResumo" component={OrcamentoResumo} />
 		</Stack.Navigator>
 	);
 }

@@ -48,6 +48,16 @@ export default function OrcamentoDetalhe() {
 		}
 	}
 
+	function editar() {
+		if (!orcamento) return;
+		navigator.navigate("OrcamentoClienteVeiculo", {
+			orcamentoId: orcamento.id,
+			cliente: orcamento.cliente,
+			veiculo: orcamento.veiculo,
+			itens: orcamento.itens,
+		});
+	}
+
 	function excluir() {
 		Alert.alert("Excluir orçamento", "Tem certeza que deseja excluir este orçamento?", [
 			{ text: "Cancelar", style: "cancel" },
@@ -94,7 +104,10 @@ export default function OrcamentoDetalhe() {
 					subtitle={formatDataHora(orcamento.criadoEm)}
 					onBack={() => navigator.goBack()}
 					right={
-						<Icon name="trash-can-outline" size={24} color={colors.red[400]} onPress={excluir} />
+						<View style={styles.headerActions}>
+							<Icon name="pencil-outline" size={22} color={colors.yellow[400]} onPress={editar} />
+							<Icon name="trash-can-outline" size={24} color={colors.red[400]} onPress={excluir} />
+						</View>
 					}
 				/>
 
@@ -158,6 +171,11 @@ export default function OrcamentoDetalhe() {
 }
 
 const styles = StyleSheet.create({
+	headerActions: {
+		flexDirection: "row",
+		alignItems: "center",
+		gap: 18,
+	},
 	center: {
 		flex: 1,
 		alignItems: "center",

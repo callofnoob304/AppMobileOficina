@@ -1,23 +1,26 @@
-import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { NavigationProp, RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { Button, Container, Content, Input, Label, ScreenHeader, StepIndicator } from "@components";
 import { View, KeyboardAvoidingView, Platform, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { OrcamentoStackParamList } from "src/navigation/types";
 import { colors } from "src/styles/colors";
-import { isValidCpfCnpj, isValidTelefone, maskCpfCnpj, maskTelefone } from "src/utils/validators";
+import { isValidCpfCnpj, isValidTelefone, maskCpfCnpj, maskMilhar, maskTelefone } from "src/utils/validators";
 import React, { useState } from "react";
 
 export default function OrcamentoClienteVeiculo() {
 	const navigator = useNavigation<NavigationProp<OrcamentoStackParamList>>();
+	const params = useRoute<RouteProp<OrcamentoStackParamList, "OrcamentoClienteVeiculo">>().params;
+	const orcamentoId = params?.orcamentoId;
+	const editando = !!orcamentoId;
 
-	const [telefone, setTelefone] = useState('');
-	const [cliente, setCliente] = useState('');
-	const [veiculo, setVeiculo] = useState('');
-	const [cpfCnpj, setCpfCnpj] = useState('');
-	const [modelo, setModelo] = useState('');
-	const [placa, setPlaca] = useState('');
-	const [ano, setAno] = useState('');
-	const [km, setKm] = useState('');
+	const [telefone, setTelefone] = useState(params?.cliente?.telefone ?? '');
+	const [cliente, setCliente] = useState(params?.cliente?.nome ?? '');
+	const [veiculo, setVeiculo] = useState(params?.veiculo?.nome ?? '');
+	const [cpfCnpj, setCpfCnpj] = useState(params?.cliente?.cpfCnpj ?? '');
+	const [modelo, setModelo] = useState(params?.veiculo?.modelo ?? '');
+	const [placa, setPlaca] = useState(params?.veiculo?.placa ?? '');
+	const [ano, setAno] = useState(params?.veiculo?.ano ?? '');
+	const [km, setKm] = useState(params?.veiculo?.km ?? '');
 
 	function avancar() {
 		if (!cliente.trim()) {
@@ -38,6 +41,7 @@ export default function OrcamentoClienteVeiculo() {
 		}
 
 		navigator.navigate('OrcamentoServicos', {
+			orcamentoId,
 			cliente: { nome: cliente.trim(), telefone: telefone.trim(), cpfCnpj: cpfCnpj.trim() },
 			veiculo: {
 				nome: veiculo.trim(),
@@ -46,6 +50,7 @@ export default function OrcamentoClienteVeiculo() {
 				placa: placa.trim().toUpperCase(),
 				km: km.trim(),
 			},
+			itens: params?.itens,
 		});
 	}
 
@@ -53,7 +58,11 @@ export default function OrcamentoClienteVeiculo() {
 		<SafeAreaView style={{ flex: 1, backgroundColor: colors.background }} edges={['top']}>
 			<KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? "padding" : undefined}>
 				<Container>
-					<ScreenHeader title="Novo orçamento" subtitle="Etapa 1 · Cliente e veículo" onBack={() => navigator.goBack()} />
+					<ScreenHeader
+						title={editando ? "Editar orçamento" : "Novo orçamento"}
+						subtitle="Etapa 1 · Cliente e veículo"
+						onBack={() => navigator.goBack()}
+					/>
 					<StepIndicator current={1} total={3} labels={["Dados", "Serviços", "Resumo"]} />
 
 					<Content style={{ gap: 28, paddingBottom: 100 }}>
@@ -84,8 +93,8 @@ export default function OrcamentoClienteVeiculo() {
 							<Input placeholder="Modelo / versão" value={modelo} onChangeText={setModelo} />
 							<View style={{ flexDirection: 'row', gap: 8 }}>
 								<Input style={{ flex: 1 }} placeholder="Ano" keyboardType="number-pad" value={ano} onChangeText={setAno} />
-								<Input style={{ flex: 1.2 }} placeholder="Placa" autoCapitalize="characters" value={placa} onChangeText={setPlaca} />
-								<Input style={{ flex: 1 }} placeholder="Km" keyboardType="number-pad" value={km} onChangeText={setKm} />
+								<Input style={{ flex: 1.2 }} placeholder="Placa" autoCapitalize="characters" value={placa} onChangeText={(v) => setPlaca(v.toUpperCase())} />
+								<Input style={{ flex: 1 }} placeholder="Km" keyboardType="number-pad" value={km} onChangeText={(v) => setKm(maskMilhar(v))} />
 							</View>
 						</View>
 					</Content>

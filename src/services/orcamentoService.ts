@@ -78,4 +78,32 @@ export const OrcamentoService = {
       lista.filter((o) => o.id !== id)
     );
   },
+
+  // Atualiza cliente, veículo e itens de um orçamento existente.
+  // Mantém id, número e data de criação (não estende a validade de 10 dias).
+  async atualizar(
+    id: string,
+    dados: { cliente: Cliente; veiculo: Veiculo; itens: OrcamentoItem[] }
+  ): Promise<Orcamento> {
+    const lista = await this.listar();
+    const existente = lista.find((o) => o.id === id);
+    if (!existente) {
+      throw new Error("Orçamento não encontrado.");
+    }
+
+    const atualizado: Orcamento = {
+      ...existente,
+      cliente: dados.cliente,
+      veiculo: dados.veiculo,
+      itens: dados.itens,
+      total: calcularTotal(dados.itens),
+    };
+
+    await StorageService.set(
+      "orcamentos",
+      lista.map((o) => (o.id === id ? atualizado : o))
+    );
+
+    return atualizado;
+  },
 };

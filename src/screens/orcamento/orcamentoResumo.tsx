@@ -1,4 +1,4 @@
-import { CommonActions, NavigationProp, RouteProp, useNavigation, useRoute } from "@react-navigation/native";
+import { NavigationProp, RouteProp, StackActions, useNavigation, useRoute } from "@react-navigation/native";
 import { Button, Container, Content, Label, Card, ScreenHeader, StepIndicator } from "@components";
 import { View, KeyboardAvoidingView, Platform, Alert, StyleSheet, ActivityIndicator } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -21,23 +21,26 @@ function InfoRow({ label, value }: { label: string; value?: string }) {
 
 export default function OrcamentoResumo() {
 	const navigator = useNavigation<NavigationProp<OrcamentoStackParamList>>();
-	const { cliente, veiculo, itens } = useRoute<RouteProp<OrcamentoStackParamList, "OrcamentoResumo">>().params;
+	const { orcamentoId, cliente, veiculo, itens } = useRoute<RouteProp<OrcamentoStackParamList, "OrcamentoResumo">>().params;
 	const [salvando, setSalvando] = useState(false);
+	const editando = !!orcamentoId;
 
 	const total = itens.reduce((acc: number, i: OrcamentoItem) => acc + i.quantidade * i.valorUnitario, 0);
 
 	async function concluir() {
 		try {
 			setSalvando(true);
-			const orcamento = await OrcamentoService.criar({ cliente, veiculo, itens });
+			const orcamento = orcamentoId
+				? await OrcamentoService.atualizar(orcamentoId, { cliente, veiculo, itens })
+				: await OrcamentoService.criar({ cliente, veiculo, itens });
 
-			navigator.dispatch(
-				CommonActions.reset({ index: 0, routes: [{ name: "Home" }] })
-			);
+			navigator.dispatch(StackActions.popToTop());
 
 			Alert.alert(
-				"Orçamento salvo!",
-				`Orçamento Nº ${orcamento.numero} de ${cliente.nome} foi salvo. Ele ficará disponível por 10 dias.`
+				editando ? "Orçamento atualizado!" : "Orçamento salvo!",
+				editando
+					? `Orçamento Nº ${orcamento.numero} foi atualizado com sucesso.`
+					: `Orçamento Nº ${orcamento.numero} de ${cliente.nome} foi salvo. Ele ficará disponível por 10 dias.`
 			);
 		} catch (e) {
 			setSalvando(false);
@@ -89,7 +92,7 @@ export default function OrcamentoResumo() {
 					</Content>
 
 					<Button
-						title={salvando ? "Salvando..." : "Concluir orçamento"}
+						title={salvando ? "Salvando..." : editando ? "Salvar alterações" : "Concluir orçamento"}
 						onPress={concluir}
 						disabled={salvando}
 						icon={salvando ? <ActivityIndicator color={colors.text.inverse} /> : undefined}

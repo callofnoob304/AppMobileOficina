@@ -95,3 +95,10 @@ export function isValidTelefone(valor: string): boolean {
   const digitos = apenasDigitos(valor);
   return digitos.length === 10 || digitos.length === 11;
 }
+
+// Aplica separador de milhar (ex.: 116000 -> 116.000) para inputs numéricos como quilometragem.
+export function maskMilhar(valor: string): string {
+  const digitos = apenasDigitos(valor).slice(0, 7);
+  if (!digitos) return "";
+  return Number(digitos).toLocaleString("pt-BR");
+}

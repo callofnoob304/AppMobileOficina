@@ -12,10 +12,10 @@ import React from "react";
 
 export default function OrcamentoServicos() {
 	const navigator = useNavigation<NavigationProp<OrcamentoStackParamList>>();
-	const { cliente, veiculo } = useRoute<RouteProp<OrcamentoStackParamList, "OrcamentoServicos">>().params;
+	const { orcamentoId, cliente, veiculo, itens: itensIniciais } = useRoute<RouteProp<OrcamentoStackParamList, "OrcamentoServicos">>().params;
 
 	const [quantidade, setQuantidade] = React.useState('');
-	const [itens, setItens] = React.useState<OrcamentoItem[]>([]);
+	const [itens, setItens] = React.useState<OrcamentoItem[]>(itensIniciais ?? []);
 	const [valor, setValor] = React.useState('');
 	const [descricao, setDescricao] = React.useState('');
 
@@ -56,7 +56,7 @@ export default function OrcamentoServicos() {
 			Alert.alert("Adicione itens", "Inclua ao menos um serviço ou peça no orçamento.");
 			return;
 		}
-		navigator.navigate('OrcamentoResumo', { cliente, veiculo, itens });
+		navigator.navigate('OrcamentoResumo', { orcamentoId, cliente, veiculo, itens });
 	}
 
 	const renderItem = ({ item }: { item: OrcamentoItem }) => (
