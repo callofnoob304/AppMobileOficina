@@ -5,6 +5,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { OrcamentoStackParamList } from "src/navigation/types";
 import { OrcamentoService } from "src/services/orcamentoService";
+import { StorageService } from "src/services/storageService";
+import { DadosOficina, OFICINA_PADRAO } from "src/types/oficina";
 import { Orcamento } from "src/types/orcamento";
 import { formatBRL } from "src/utils/format";
 import { colors } from "src/styles/colors";
@@ -14,12 +16,17 @@ import React, { useCallback, useState } from "react";
 export default function Home() {
 	const navigator = useNavigation<NavigationProp<OrcamentoStackParamList>>();
 	const [orcamentos, setOrcamentos] = useState<Orcamento[]>([]);
+	const [oficina, setOficina] = useState<DadosOficina>(OFICINA_PADRAO);
 	const [carregando, setCarregando] = useState(false);
 
 	const carregar = useCallback(async () => {
 		setCarregando(true);
-		const lista = await OrcamentoService.listar();
+		const [lista, salvo] = await Promise.all([
+			OrcamentoService.listar(),
+			StorageService.get("oficina"),
+		]);
 		setOrcamentos(lista);
+		setOficina(salvo ? { ...OFICINA_PADRAO, ...salvo } : OFICINA_PADRAO);
 		setCarregando(false);
 	}, []);
 
@@ -44,10 +51,15 @@ export default function Home() {
 				refreshControl={<RefreshControl refreshing={carregando} onRefresh={carregar} tintColor={colors.yellow[400]} />}
 			>
 				<View style={styles.header}>
-					<Image source={require("../../assets/logo_app.png")} style={styles.logo} />
-					<View>
-						<Label title="WEIRICH" style={{ letterSpacing: 1 }} />
-						<Label muted label="Mecânica Automotiva" style={{ fontSize: 13 }} />
+					<Image
+						source={oficina.logoUri ? { uri: oficina.logoUri } : require("../../assets/logo_app.png")}
+						style={styles.logo}
+					/>
+					<View style={{ flex: 1 }}>
+						<Label title={oficina.nome} style={{ letterSpacing: 1 }} numberOfLines={1} ellipsizeMode="tail" />
+						{oficina.responsavel ? (
+							<Label muted label={oficina.responsavel} style={{ fontSize: 13 }} numberOfLines={1} ellipsizeMode="tail" />
+						) : null}
 					</View>
 				</View>
 

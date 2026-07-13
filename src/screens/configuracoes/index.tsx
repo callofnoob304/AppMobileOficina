@@ -1,11 +1,12 @@
-import { View, StyleSheet, KeyboardAvoidingView, Platform, Alert, ActivityIndicator } from "react-native";
+import { View, StyleSheet, KeyboardAvoidingView, Platform, Alert, ActivityIndicator, Image, TouchableOpacity } from "react-native";
 import { Button, Card, Content, Input, Label } from "@components";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import { launchImageLibrary } from "react-native-image-picker";
 import { StorageService } from "src/services/storageService";
 import { DadosOficina, OFICINA_PADRAO } from "src/types/oficina";
 import { colors } from "src/styles/colors";
-import { spacing } from "src/styles/theme";
+import { radius, spacing } from "src/styles/theme";
 import { isValidCpfCnpj, isValidTelefone, maskCpfCnpj, maskTelefone } from "src/utils/validators";
 import React, { useEffect, useState } from "react";
 
@@ -15,13 +16,35 @@ export default function Configuracoes() {
 
 	useEffect(() => {
 		StorageService.get("oficina").then((salvo) => {
-			if (salvo) setDados(salvo);
+			if (salvo) setDados({ ...OFICINA_PADRAO, ...salvo });
 			setCarregando(false);
 		});
 	}, []);
 
 	function atualizar(campo: keyof DadosOficina, valor: string) {
 		setDados((prev) => ({ ...prev, [campo]: valor }));
+	}
+
+	async function escolherLogo() {
+		const resultado = await launchImageLibrary({
+			mediaType: "photo",
+			includeBase64: true,
+			maxWidth: 512,
+			maxHeight: 512,
+			quality: 0.8,
+		});
+
+		if (resultado.didCancel || resultado.errorCode) return;
+
+		const asset = resultado.assets?.[0];
+		if (!asset?.base64) return;
+
+		const tipo = asset.type ?? "image/jpeg";
+		atualizar("logoUri", `data:${tipo};base64,${asset.base64}`);
+	}
+
+	function removerLogo() {
+		atualizar("logoUri", "");
 	}
 
 	async function salvar() {
@@ -54,6 +77,35 @@ export default function Configuracoes() {
 					<Label muted label="Dados usados no cabeçalho dos orçamentos" style={{ fontSize: 13, marginBottom: 16 }} />
 
 					<Content style={{ gap: 16, paddingBottom: 100 }}>
+						<Card style={{ gap: 10 }}>
+							<View style={styles.cardHeader}>
+								<Icon name="image-outline" size={20} color={colors.yellow[400]} />
+								<Label label="Logo da empresa" style={{ fontWeight: "700" }} />
+							</View>
+
+							<View style={styles.logoRow}>
+								<TouchableOpacity style={styles.logoPreview} onPress={escolherLogo}>
+									{dados.logoUri ? (
+										<Image source={{ uri: dados.logoUri }} style={styles.logoImage} />
+									) : (
+										<Icon name="image-plus" size={28} color={colors.text.muted} />
+									)}
+								</TouchableOpacity>
+
+								<View style={{ gap: 6 }}>
+									<Button
+										title={dados.logoUri ? "Alterar logo" : "Escolher logo"}
+										variant="outline"
+										onPress={escolherLogo}
+										style={styles.logoButton}
+									/>
+									{dados.logoUri ? (
+										<Button title="Remover logo" variant="ghost" onPress={removerLogo} style={styles.logoButton} />
+									) : null}
+								</View>
+							</View>
+						</Card>
+
 						<Card style={{ gap: 10 }}>
 							<View style={styles.cardHeader}>
 								<Icon name="wrench-outline" size={20} color={colors.yellow[400]} />
@@ -105,5 +157,29 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		gap: 8,
 		marginBottom: 4,
+	},
+	logoRow: {
+		flexDirection: "row",
+		alignItems: "center",
+		gap: spacing.md,
+	},
+	logoPreview: {
+		width: 72,
+		height: 72,
+		borderRadius: radius.md,
+		borderWidth: 1,
+		borderColor: colors.border,
+		backgroundColor: colors.surfaceAlt,
+		alignItems: "center",
+		justifyContent: "center",
+		overflow: "hidden",
+	},
+	logoImage: {
+		width: "100%",
+		height: "100%",
+	},
+	logoButton: {
+		width: 180,
+		paddingVertical: spacing.sm,
 	},
 });

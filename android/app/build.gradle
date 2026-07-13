@@ -116,6 +116,10 @@ dependencies {
     } else {
         implementation jscFlavor
     }
+
+    // Suporte ao AndroidX Photo Picker (backport) usado por react-native-image-picker,
+    // necessário porque o minSdkVersion do app (24) é menor que 30.
+    implementation("androidx.activity:activity:1.9.3")
 }
 
 apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
