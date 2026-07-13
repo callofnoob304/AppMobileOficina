@@ -85,11 +85,10 @@ export default function Configuracoes() {
 
 							<View style={styles.logoRow}>
 								<TouchableOpacity style={styles.logoPreview} onPress={escolherLogo}>
-									{dados.logoUri ? (
-										<Image source={{ uri: dados.logoUri }} style={styles.logoImage} />
-									) : (
-										<Icon name="image-plus" size={28} color={colors.text.muted} />
-									)}
+									<Image
+										source={dados.logoUri ? { uri: dados.logoUri } : require("../../assets/logo_app.png")}
+										style={styles.logoImage}
+									/>
 								</TouchableOpacity>
 
 								<View style={{ gap: 6 }}>
