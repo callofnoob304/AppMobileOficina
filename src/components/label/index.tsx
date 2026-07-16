@@ -1,5 +1,5 @@
-import { Text, TextProps, View, StyleSheet, ViewStyle } from "react-native";
-import { colors } from "../styles/colors";
+import { Text, TextProps, View, ViewStyle } from "react-native";
+import { styles } from "./styles";
 import React from "react";
 
 interface LabelProps extends TextProps {
@@ -34,30 +34,3 @@ export default function Label({ title, label, center, linha, muted, style, conta
 		</View>
 	);
 }
-
-const styles = StyleSheet.create({
-	row: {
-		flexDirection: "row",
-		justifyContent: "space-between",
-		alignItems: "center",
-	},
-	column: {
-		gap: 4,
-	},
-	title: {
-		fontSize: 20,
-		fontWeight: "bold",
-		color: colors.text.primary,
-	},
-	label: {
-		fontSize: 16,
-		color: colors.text.primary,
-	},
-	muted: {
-		color: colors.text.secondary,
-	},
-	center: {
-		alignSelf: "center",
-		textAlign: "center",
-	},
-});

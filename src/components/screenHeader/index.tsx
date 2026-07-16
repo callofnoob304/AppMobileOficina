@@ -1,7 +1,7 @@
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { colors } from "../styles/colors";
-import { spacing } from "../styles/theme";
+import { colors } from "src/styles/colors";
+import { styles } from "./styles";
 import React from "react";
 
 interface Props {
@@ -35,34 +35,3 @@ export default function ScreenHeader({ title, subtitle, onBack, right }: Props) 
 		</View>
 	);
 }
-
-const styles = StyleSheet.create({
-	container: {
-		flexDirection: "row",
-		alignItems: "center",
-		justifyContent: "space-between",
-		marginBottom: spacing.lg,
-	},
-	left: {
-		flexDirection: "row",
-		alignItems: "center",
-		flex: 1,
-		gap: spacing.xs,
-	},
-	back: {
-		marginLeft: -6,
-	},
-	titles: {
-		flex: 1,
-	},
-	title: {
-		fontSize: 22,
-		fontWeight: "bold",
-		color: colors.text.primary,
-	},
-	subtitle: {
-		fontSize: 14,
-		color: colors.text.secondary,
-		marginTop: 2,
-	},
-});

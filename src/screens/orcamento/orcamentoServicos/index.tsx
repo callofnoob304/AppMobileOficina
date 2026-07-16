@@ -1,12 +1,13 @@
 import { NavigationProp, RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { Button, Container, Content, Input, Label, Card, ScreenHeader, StepIndicator } from "@components";
-import { FlatList, TouchableOpacity, View, Alert, StyleSheet } from "react-native";
+import { FlatList, TouchableOpacity, View, Alert } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { OrcamentoStackParamList } from "src/navigation/types";
 import { OrcamentoItem } from "src/types/orcamento";
 import { calcularTotal } from "src/services/orcamentoService";
 import { formatBRL, parseValor } from "src/utils/format";
 import { colors } from "src/styles/colors";
+import { styles } from "./styles";
 import React from "react";
 
 export default function OrcamentoServicos() {
@@ -116,34 +117,3 @@ export default function OrcamentoServicos() {
 		</Container>
 	);
 }
-
-const styles = StyleSheet.create({
-	row: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		paddingVertical: 12,
-		borderBottomWidth: 1,
-		borderBottomColor: colors.border,
-	},
-	addButton: {
-		backgroundColor: colors.yellow[400],
-		justifyContent: 'center',
-		alignItems: 'center',
-		width: 52,
-		height: 52,
-		borderRadius: 12,
-	},
-	empty: {
-		alignItems: 'center',
-		gap: 8,
-		paddingVertical: 24,
-	},
-	footer: {
-		gap: 12,
-	},
-	totalRow: {
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		alignItems: 'center',
-	},
-});

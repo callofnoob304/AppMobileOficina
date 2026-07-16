@@ -1,11 +1,12 @@
 import { NavigationProp, RouteProp, StackActions, useNavigation, useRoute } from "@react-navigation/native";
 import { Button, Container, Content, Label, Card, ScreenHeader, StepIndicator } from "@components";
-import { View, Alert, StyleSheet, ActivityIndicator } from "react-native";
+import { View, Alert, ActivityIndicator } from "react-native";
 import { OrcamentoStackParamList } from "src/navigation/types";
 import { OrcamentoService } from "src/services/orcamentoService";
 import { OrcamentoItem } from "src/types/orcamento";
 import { formatBRL } from "src/utils/format";
 import { colors } from "src/styles/colors";
+import { styles } from "./styles";
 import React, { useState } from "react";
 
 function InfoRow({ label, value }: { label: string; value?: string }) {
@@ -97,26 +98,3 @@ export default function OrcamentoResumo() {
 		</Container>
 	);
 }
-
-const styles = StyleSheet.create({
-	infoRow: {
-		flexDirection: "row",
-		justifyContent: "space-between",
-		alignItems: "center",
-		gap: 12,
-	},
-	itemRow: {
-		flexDirection: "row",
-		alignItems: "center",
-		justifyContent: "space-between",
-		paddingVertical: 6,
-		borderBottomWidth: 1,
-		borderBottomColor: colors.border,
-	},
-	totalRow: {
-		flexDirection: "row",
-		justifyContent: "space-between",
-		alignItems: "center",
-		paddingHorizontal: 4,
-	},
-});

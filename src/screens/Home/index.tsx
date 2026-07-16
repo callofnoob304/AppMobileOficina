@@ -1,5 +1,5 @@
 import { NavigationProp, useFocusEffect, useNavigation } from "@react-navigation/native";
-import { View, StyleSheet, Image, ScrollView, TouchableOpacity, RefreshControl } from "react-native";
+import { View, Image, ScrollView, TouchableOpacity, RefreshControl } from "react-native";
 import { Button, Card, Container, Label, OrcamentoCard } from "@components";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { OrcamentoStackParamList } from "src/navigation/types";
@@ -10,6 +10,7 @@ import { Orcamento } from "src/types/orcamento";
 import { formatBRL } from "src/utils/format";
 import { colors } from "src/styles/colors";
 import { spacing } from "src/styles/theme";
+import { styles } from "./styles";
 import React, { useCallback, useState } from "react";
 
 export default function Home() {
@@ -111,40 +112,3 @@ export default function Home() {
 		</Container>
 	);
 }
-
-const styles = StyleSheet.create({
-	content: {
-		padding: spacing.xl,
-		gap: spacing.lg,
-		paddingBottom: 40,
-	},
-	header: {
-		flexDirection: "row",
-		alignItems: "center",
-		gap: spacing.md,
-	},
-	logo: {
-		width: 52,
-		height: 52,
-		borderRadius: 12,
-	},
-	stats: {
-		flexDirection: "row",
-		gap: spacing.md,
-	},
-	statCard: {
-		flex: 1,
-		gap: 4,
-	},
-	sectionHeader: {
-		flexDirection: "row",
-		justifyContent: "space-between",
-		alignItems: "center",
-		marginTop: spacing.sm,
-	},
-	empty: {
-		alignItems: "center",
-		gap: 8,
-		paddingVertical: spacing.xxl,
-	},
-});

@@ -1,5 +1,5 @@
 import { NavigationProp, useFocusEffect, useNavigation } from "@react-navigation/native";
-import { View, StyleSheet, FlatList, RefreshControl } from "react-native";
+import { View, FlatList, RefreshControl } from "react-native";
 import { Container, Input, Label, OrcamentoCard } from "@components";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { OrcamentoStackParamList } from "src/navigation/types";
@@ -7,6 +7,7 @@ import { OrcamentoService } from "src/services/orcamentoService";
 import { Orcamento } from "src/types/orcamento";
 import { colors } from "src/styles/colors";
 import { spacing } from "src/styles/theme";
+import { styles } from "./styles";
 import React, { useCallback, useMemo, useState } from "react";
 
 export default function Historico() {
@@ -71,11 +72,3 @@ export default function Historico() {
 		</Container>
 	);
 }
-
-const styles = StyleSheet.create({
-	empty: {
-		alignItems: "center",
-		gap: 10,
-		paddingVertical: 60,
-	},
-});

@@ -1,4 +1,5 @@
-import { ScrollView, ScrollViewProps, StyleSheet } from "react-native";
+import { ScrollView, ScrollViewProps } from "react-native";
+import { styles } from "./styles";
 import React from "react";
 
 type Props = ScrollViewProps & {
@@ -17,9 +18,3 @@ export default function Content({ children, style, ...rest }: Props) {
 		</ScrollView>
 	);
 }
-
-const styles = StyleSheet.create({
-	content: {
-		flexGrow: 1,
-	},
-});

@@ -1,7 +1,6 @@
-import { View, ViewProps, StyleSheet, KeyboardAvoidingView, Platform } from "react-native";
+import { View, ViewProps, KeyboardAvoidingView, Platform } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { colors } from "../styles/colors";
-import { spacing } from "../styles/theme";
+import { styles } from "./styles";
 import React from "react";
 
 type Props = ViewProps & {
@@ -22,21 +21,3 @@ export default function Container({ children, style, noPadding, ...rest }: Props
 		</SafeAreaView>
 	);
 }
-
-const styles = StyleSheet.create({
-	safeArea: {
-		flex: 1,
-		backgroundColor: colors.background,
-	},
-	flex: {
-		flex: 1,
-	},
-	container: {
-		flex: 1,
-		padding: spacing.xl,
-		backgroundColor: colors.background,
-	},
-	noPadding: {
-		padding: 0,
-	},
-});

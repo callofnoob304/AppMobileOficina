@@ -3,6 +3,7 @@ import { Button, Container, Content, Input, Label, ScreenHeader, StepIndicator }
 import { View, Alert } from "react-native";
 import { OrcamentoStackParamList } from "src/navigation/types";
 import { isValidCpfCnpj, isValidTelefone, maskCpfCnpj, maskMilhar, maskTelefone } from "src/utils/validators";
+import { styles } from "./styles";
 import React, { useState } from "react";
 
 export default function OrcamentoClienteVeiculo() {
@@ -61,8 +62,8 @@ export default function OrcamentoClienteVeiculo() {
 			/>
 			<StepIndicator current={1} total={3} labels={["Dados", "Serviços", "Resumo"]} />
 
-			<Content style={{ gap: 28, paddingBottom: 100 }}>
-				<View style={{ gap: 10 }}>
+			<Content style={styles.content}>
+				<View style={styles.section}>
 					<Label label="Dados do cliente" style={{ fontWeight: "700" }} />
 
 					<Input placeholder="Nome do cliente *" value={cliente} onChangeText={setCliente} />
@@ -82,15 +83,15 @@ export default function OrcamentoClienteVeiculo() {
 					/>
 				</View>
 
-				<View style={{ gap: 10 }}>
+				<View style={styles.section}>
 					<Label label="Dados do veículo" style={{ fontWeight: "700" }} />
 
 					<Input placeholder="Veículo * (ex.: Fiat Uno)" value={veiculo} onChangeText={setVeiculo} />
 					<Input placeholder="Modelo / versão" value={modelo} onChangeText={setModelo} />
-					<View style={{ flexDirection: 'row', gap: 8 }}>
-						<Input style={{ flex: 1 }} placeholder="Ano" keyboardType="number-pad" value={ano} onChangeText={setAno} />
-						<Input style={{ flex: 1.2 }} placeholder="Placa" autoCapitalize="characters" value={placa} onChangeText={(v) => setPlaca(v.toUpperCase())} />
-						<Input style={{ flex: 1 }} placeholder="Km" keyboardType="number-pad" value={km} onChangeText={(v) => setKm(maskMilhar(v))} />
+					<View style={styles.veiculoRow}>
+						<Input style={styles.flex1} placeholder="Ano" keyboardType="number-pad" value={ano} onChangeText={setAno} />
+						<Input style={styles.flex12} placeholder="Placa" autoCapitalize="characters" value={placa} onChangeText={(v) => setPlaca(v.toUpperCase())} />
+						<Input style={styles.flex1} placeholder="Km" keyboardType="number-pad" value={km} onChangeText={(v) => setKm(maskMilhar(v))} />
 					</View>
 				</View>
 			</Content>

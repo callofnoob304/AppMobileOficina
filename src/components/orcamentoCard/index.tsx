@@ -1,10 +1,11 @@
-import { View, StyleSheet } from "react-native";
+import { View } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { colors } from "../styles/colors";
-import { formatBRL, formatData } from "../utils/format";
-import { Orcamento } from "../types/orcamento";
-import Card from "./card";
-import Label from "./label";
+import { colors } from "src/styles/colors";
+import { formatBRL, formatData } from "src/utils/format";
+import { Orcamento } from "src/types/orcamento";
+import Card from "src/components/card";
+import Label from "src/components/label";
+import { styles } from "./styles";
 import React from "react";
 
 interface Props {
@@ -33,26 +34,3 @@ export default function OrcamentoCard({ orcamento, onPress }: Props) {
 		</Card>
 	);
 }
-
-const styles = StyleSheet.create({
-	card: {
-		flexDirection: "row",
-		alignItems: "center",
-		gap: 8,
-	},
-	topRow: {
-		flexDirection: "row",
-		justifyContent: "space-between",
-		alignItems: "center",
-	},
-	numero: {
-		fontSize: 12,
-		fontWeight: "700",
-		color: colors.yellow[400],
-	},
-	total: {
-		fontSize: 16,
-		fontWeight: "700",
-		marginTop: 4,
-	},
-});
