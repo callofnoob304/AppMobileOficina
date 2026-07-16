@@ -83,7 +83,7 @@ export default function Configuracoes() {
 					<View style={styles.logoRow}>
 						<TouchableOpacity style={styles.logoPreview} onPress={escolherLogo}>
 							<Image
-								source={dados.logoUri ? { uri: dados.logoUri } : require("../../assets/logo_app.png")}
+								source={dados.logoUri ? { uri: dados.logoUri } : require("../../assets/icon/play_store_icon_512.png")}
 								style={styles.logoImage}
 							/>
 						</TouchableOpacity>

@@ -51,7 +51,7 @@ export default function Home() {
 			>
 				<View style={styles.header}>
 					<Image
-						source={oficina.logoUri ? { uri: oficina.logoUri } : require("../../assets/logo_app.png")}
+						source={oficina.logoUri ? { uri: oficina.logoUri } : require("../../assets/icon/play_store_icon_512.png")}
 						style={styles.logo}
 					/>
 					<View style={{ flex: 1 }}>
