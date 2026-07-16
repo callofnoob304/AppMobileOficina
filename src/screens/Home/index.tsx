@@ -1,7 +1,6 @@
 import { NavigationProp, useFocusEffect, useNavigation } from "@react-navigation/native";
 import { View, StyleSheet, Image, ScrollView, TouchableOpacity, RefreshControl } from "react-native";
-import { Button, Card, Label, OrcamentoCard } from "@components";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { Button, Card, Container, Label, OrcamentoCard } from "@components";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { OrcamentoStackParamList } from "src/navigation/types";
 import { OrcamentoService } from "src/services/orcamentoService";
@@ -44,7 +43,7 @@ export default function Home() {
 	}
 
 	return (
-		<SafeAreaView style={styles.safe} edges={['top']}>
+		<Container noPadding>
 			<ScrollView
 				contentContainerStyle={styles.content}
 				showsVerticalScrollIndicator={false}
@@ -109,15 +108,11 @@ export default function Home() {
 					</View>
 				)}
 			</ScrollView>
-		</SafeAreaView>
+		</Container>
 	);
 }
 
 const styles = StyleSheet.create({
-	safe: {
-		flex: 1,
-		backgroundColor: colors.background,
-	},
 	content: {
 		padding: spacing.xl,
 		gap: spacing.lg,

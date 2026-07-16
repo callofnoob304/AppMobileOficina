@@ -1,7 +1,6 @@
 import { NavigationProp, useFocusEffect, useNavigation } from "@react-navigation/native";
 import { View, StyleSheet, FlatList, RefreshControl } from "react-native";
-import { Input, Label, OrcamentoCard } from "@components";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { Container, Input, Label, OrcamentoCard } from "@components";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { OrcamentoStackParamList } from "src/navigation/types";
 import { OrcamentoService } from "src/services/orcamentoService";
@@ -39,51 +38,41 @@ export default function Historico() {
 	}, [orcamentos, busca]);
 
 	return (
-		<SafeAreaView style={styles.safe} edges={['top']}>
-			<View style={styles.container}>
-				<Label title="Histórico" style={{ marginBottom: 4 }} />
-				<Label muted label="Orçamentos salvos (últimos 10 dias)" style={{ fontSize: 13, marginBottom: 12 }} />
+		<Container>
+			<Label title="Histórico" style={{ marginBottom: 4 }} />
+			<Label muted label="Orçamentos salvos (últimos 10 dias)" style={{ fontSize: 13, marginBottom: 12 }} />
 
-				<Input
-					placeholder="Buscar por cliente, veículo, placa ou nº"
-					value={busca}
-					onChangeText={setBusca}
-					style={{ marginBottom: 12 }}
-				/>
+			<Input
+				placeholder="Buscar por cliente, veículo, placa ou nº"
+				value={busca}
+				onChangeText={setBusca}
+				style={{ marginBottom: 12 }}
+			/>
 
-				<FlatList
-					data={filtrados}
-					keyExtractor={(item) => item.id}
-					showsVerticalScrollIndicator={false}
-					contentContainerStyle={{ gap: spacing.md, paddingBottom: 24 }}
-					refreshControl={<RefreshControl refreshing={carregando} onRefresh={carregar} tintColor={colors.yellow[400]} />}
-					renderItem={({ item }) => (
-						<OrcamentoCard
-							orcamento={item}
-							onPress={() => navigator.navigate("OrcamentoDetalhe", { id: item.id })}
-						/>
-					)}
-					ListEmptyComponent={
-						<View style={styles.empty}>
-							<Icon name="folder-open-outline" size={44} color={colors.text.muted} />
-							<Label muted label={busca ? "Nenhum resultado para a busca." : "Nenhum orçamento salvo ainda."} center />
-						</View>
-					}
-				/>
-			</View>
-		</SafeAreaView>
+			<FlatList
+				data={filtrados}
+				keyExtractor={(item) => item.id}
+				showsVerticalScrollIndicator={false}
+				contentContainerStyle={{ gap: spacing.md, paddingBottom: 24 }}
+				refreshControl={<RefreshControl refreshing={carregando} onRefresh={carregar} tintColor={colors.yellow[400]} />}
+				renderItem={({ item }) => (
+					<OrcamentoCard
+						orcamento={item}
+						onPress={() => navigator.navigate("OrcamentoDetalhe", { id: item.id })}
+					/>
+				)}
+				ListEmptyComponent={
+					<View style={styles.empty}>
+						<Icon name="folder-open-outline" size={44} color={colors.text.muted} />
+						<Label muted label={busca ? "Nenhum resultado para a busca." : "Nenhum orçamento salvo ainda."} center />
+					</View>
+				}
+			/>
+		</Container>
 	);
 }
 
 const styles = StyleSheet.create({
-	safe: {
-		flex: 1,
-		backgroundColor: colors.background,
-	},
-	container: {
-		flex: 1,
-		padding: spacing.xl,
-	},
 	empty: {
 		alignItems: "center",
 		gap: 10,

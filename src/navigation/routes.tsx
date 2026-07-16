@@ -6,6 +6,7 @@ import OrcamentoDetalhe from "src/screens/orcamento/orcamentoDetalhe";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import OrcamentoResumo from "src/screens/orcamento/orcamentoResumo";
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { colors } from "../styles/colors";
 import Configuracoes from "../screens/configuracoes";
 import Historico from "../screens/historico";
@@ -52,6 +53,8 @@ function HistoricoStack() {
 }
 
 export default function Routes() {
+	const insets = useSafeAreaInsets();
+
 	return (
 		<NavigationContainer theme={navTheme}>
 			<Tab.Navigator
@@ -62,8 +65,8 @@ export default function Routes() {
 					tabBarStyle: {
 						backgroundColor: colors.surface,
 						borderTopColor: colors.border,
-						height: 62,
-						paddingBottom: 8,
+						height: 62 + insets.bottom,
+						paddingBottom: 8 + insets.bottom,
 						paddingTop: 6,
 					},
 					tabBarLabelStyle: {

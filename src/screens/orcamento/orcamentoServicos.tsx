@@ -1,7 +1,6 @@
 import { NavigationProp, RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { Button, Container, Content, Input, Label, Card, ScreenHeader, StepIndicator } from "@components";
-import { FlatList, KeyboardAvoidingView, Platform, TouchableOpacity, View, Alert, StyleSheet } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { FlatList, TouchableOpacity, View, Alert, StyleSheet } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { OrcamentoStackParamList } from "src/navigation/types";
 import { OrcamentoItem } from "src/types/orcamento";
@@ -73,52 +72,48 @@ export default function OrcamentoServicos() {
 	);
 
 	return (
-		<SafeAreaView style={{ flex: 1, backgroundColor: colors.background }} edges={['top']}>
-			<KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? "padding" : undefined}>
-				<Container>
-					<ScreenHeader title="Serviços e peças" subtitle="Etapa 2 · Itens do orçamento" onBack={() => navigator.goBack()} />
-					<StepIndicator current={2} total={3} labels={["Dados", "Serviços", "Resumo"]} />
+		<Container>
+			<ScreenHeader title="Serviços e peças" subtitle="Etapa 2 · Itens do orçamento" onBack={() => navigator.goBack()} />
+			<StepIndicator current={2} total={3} labels={["Dados", "Serviços", "Resumo"]} />
 
-					<Content style={{ gap: 20, paddingBottom: 120 }}>
-						<Card style={{ gap: 10 }}>
-							<Label label="Adicionar item" style={{ fontWeight: "700" }} />
-							<Input placeholder="Serviço ou peça" value={descricao} onChangeText={setDescricao} />
-							<View style={{ flexDirection: 'row', gap: 8, alignItems: 'center' }}>
-								<Input style={{ flex: 1 }} placeholder="Qtd" keyboardType="number-pad" value={quantidade} onChangeText={setQuantidade} />
-								<Input style={{ flex: 1.6 }} placeholder="Valor unit." keyboardType="decimal-pad" value={valor} onChangeText={setValor} />
-								<TouchableOpacity style={styles.addButton} onPress={adicionarItem}>
-									<Icon name="plus" size={26} color={colors.text.inverse} />
-								</TouchableOpacity>
-							</View>
-						</Card>
-
-						<View>
-							<Label label={`Itens (${itens.length})`} style={{ fontWeight: "700", marginBottom: 8 }} />
-							<FlatList
-								data={itens}
-								keyExtractor={(item) => item.id}
-								renderItem={renderItem}
-								scrollEnabled={false}
-								ListEmptyComponent={
-									<View style={styles.empty}>
-										<Icon name="clipboard-text-outline" size={32} color={colors.text.muted} />
-										<Label muted label="Nenhum item adicionado" />
-									</View>
-								}
-							/>
-						</View>
-					</Content>
-
-					<View style={styles.footer}>
-						<View style={styles.totalRow}>
-							<Label muted label="Total do orçamento" />
-							<Label title={formatBRL(total)} style={{ color: colors.yellow[400] }} />
-						</View>
-						<Button title="Avançar" onPress={avancar} disabled={itens.length === 0} />
+			<Content style={{ gap: 20, paddingBottom: 120 }}>
+				<Card style={{ gap: 10 }}>
+					<Label label="Adicionar item" style={{ fontWeight: "700" }} />
+					<Input placeholder="Serviço ou peça" value={descricao} onChangeText={setDescricao} />
+					<View style={{ flexDirection: 'row', gap: 8, alignItems: 'center' }}>
+						<Input style={{ flex: 1 }} placeholder="Qtd" keyboardType="number-pad" value={quantidade} onChangeText={setQuantidade} />
+						<Input style={{ flex: 1.6 }} placeholder="Valor unit." keyboardType="decimal-pad" value={valor} onChangeText={setValor} />
+						<TouchableOpacity style={styles.addButton} onPress={adicionarItem}>
+							<Icon name="plus" size={26} color={colors.text.inverse} />
+						</TouchableOpacity>
 					</View>
-				</Container>
-			</KeyboardAvoidingView>
-		</SafeAreaView>
+				</Card>
+
+				<View>
+					<Label label={`Itens (${itens.length})`} style={{ fontWeight: "700", marginBottom: 8 }} />
+					<FlatList
+						data={itens}
+						keyExtractor={(item) => item.id}
+						renderItem={renderItem}
+						scrollEnabled={false}
+						ListEmptyComponent={
+							<View style={styles.empty}>
+								<Icon name="clipboard-text-outline" size={32} color={colors.text.muted} />
+								<Label muted label="Nenhum item adicionado" />
+							</View>
+						}
+					/>
+				</View>
+			</Content>
+
+			<View style={styles.footer}>
+				<View style={styles.totalRow}>
+					<Label muted label="Total do orçamento" />
+					<Label title={formatBRL(total)} style={{ color: colors.yellow[400] }} />
+				</View>
+				<Button title="Avançar" onPress={avancar} disabled={itens.length === 0} />
+			</View>
+		</Container>
 	);
 }
 

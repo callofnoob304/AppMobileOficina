@@ -1,7 +1,6 @@
 import { NavigationProp, RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { Button, Container, Content, Label, Card, ScreenHeader } from "@components";
 import { View, StyleSheet, Alert, ActivityIndicator } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { OrcamentoStackParamList } from "src/navigation/types";
 import { OrcamentoService } from "src/services/orcamentoService";
@@ -74,99 +73,95 @@ export default function OrcamentoDetalhe() {
 
 	if (carregando) {
 		return (
-			<SafeAreaView style={styles.center} edges={['top']}>
+			<Container style={styles.center}>
 				<ActivityIndicator color={colors.yellow[400]} />
-			</SafeAreaView>
+			</Container>
 		);
 	}
 
 	if (!orcamento) {
 		return (
-			<SafeAreaView style={{ flex: 1, backgroundColor: colors.background }} edges={['top']}>
-				<Container>
-					<ScreenHeader title="Orçamento" onBack={() => navigator.goBack()} />
-					<View style={styles.center}>
-						<Icon name="file-remove-outline" size={40} color={colors.text.muted} />
-						<Label muted label="Orçamento não encontrado ou expirado." />
-					</View>
-				</Container>
-			</SafeAreaView>
+			<Container>
+				<ScreenHeader title="Orçamento" onBack={() => navigator.goBack()} />
+				<View style={styles.center}>
+					<Icon name="file-remove-outline" size={40} color={colors.text.muted} />
+					<Label muted label="Orçamento não encontrado ou expirado." />
+				</View>
+			</Container>
 		);
 	}
 
 	const dias = diasRestantes(orcamento.criadoEm);
 
 	return (
-		<SafeAreaView style={{ flex: 1, backgroundColor: colors.background }} edges={['top']}>
-			<Container>
-				<ScreenHeader
-					title={`Orçamento Nº ${orcamento.numero}`}
-					subtitle={formatDataHora(orcamento.criadoEm)}
-					onBack={() => navigator.goBack()}
-					right={
-						<View style={styles.headerActions}>
-							<Icon name="pencil-outline" size={22} color={colors.yellow[400]} onPress={editar} />
-							<Icon name="trash-can-outline" size={24} color={colors.red[400]} onPress={excluir} />
-						</View>
-					}
-				/>
-
-				<Content style={{ gap: 16, paddingBottom: 120 }}>
-					<View style={styles.validade}>
-						<Icon name="clock-outline" size={16} color={colors.yellow[400]} />
-						<Label muted label={dias > 0 ? `Expira em ${dias} dia${dias > 1 ? "s" : ""}` : "Expira hoje"} style={{ fontSize: 13 }} />
+		<Container>
+			<ScreenHeader
+				title={`Orçamento Nº ${orcamento.numero}`}
+				subtitle={formatDataHora(orcamento.criadoEm)}
+				onBack={() => navigator.goBack()}
+				right={
+					<View style={styles.headerActions}>
+						<Icon name="pencil-outline" size={22} color={colors.yellow[400]} onPress={editar} />
+						<Icon name="trash-can-outline" size={24} color={colors.red[400]} onPress={excluir} />
 					</View>
+				}
+			/>
 
-					<Card style={{ gap: 6 }} highlight>
-						<Label label="Cliente" style={{ fontWeight: "700", marginBottom: 4 }} />
-						<InfoRow label="Nome" value={orcamento.cliente.nome} />
-						<InfoRow label="Telefone" value={orcamento.cliente.telefone} />
-						<InfoRow label="CPF/CNPJ" value={orcamento.cliente.cpfCnpj} />
-					</Card>
+			<Content style={{ gap: 16, paddingBottom: 120 }}>
+				<View style={styles.validade}>
+					<Icon name="clock-outline" size={16} color={colors.yellow[400]} />
+					<Label muted label={dias > 0 ? `Expira em ${dias} dia${dias > 1 ? "s" : ""}` : "Expira hoje"} style={{ fontSize: 13 }} />
+				</View>
 
-					<Card style={{ gap: 6 }} highlight>
-						<Label label="Veículo" style={{ fontWeight: "700", marginBottom: 4 }} />
-						<InfoRow label="Veículo" value={orcamento.veiculo.nome} />
-						<InfoRow label="Modelo" value={orcamento.veiculo.modelo} />
-						<InfoRow label="Ano" value={orcamento.veiculo.ano} />
-						<InfoRow label="Placa" value={orcamento.veiculo.placa} />
-						<InfoRow label="Km" value={orcamento.veiculo.km} />
-					</Card>
+				<Card style={{ gap: 6 }} highlight>
+					<Label label="Cliente" style={{ fontWeight: "700", marginBottom: 4 }} />
+					<InfoRow label="Nome" value={orcamento.cliente.nome} />
+					<InfoRow label="Telefone" value={orcamento.cliente.telefone} />
+					<InfoRow label="CPF/CNPJ" value={orcamento.cliente.cpfCnpj} />
+				</Card>
 
-					<Card style={{ gap: 4 }}>
-						<Label label={`Itens (${orcamento.itens.length})`} style={{ fontWeight: "700", marginBottom: 6 }} />
-						{orcamento.itens.map((item) => (
-							<View key={item.id} style={styles.itemRow}>
-								<View style={{ flex: 1 }}>
-									<Label label={item.descricao} style={{ fontSize: 14 }} />
-									<Label muted label={`${item.quantidade} × ${formatBRL(item.valorUnitario)}`} style={{ fontSize: 12 }} />
-								</View>
-								<Label label={formatBRL(item.quantidade * item.valorUnitario)} style={{ fontSize: 14, fontWeight: "600" }} />
+				<Card style={{ gap: 6 }} highlight>
+					<Label label="Veículo" style={{ fontWeight: "700", marginBottom: 4 }} />
+					<InfoRow label="Veículo" value={orcamento.veiculo.nome} />
+					<InfoRow label="Modelo" value={orcamento.veiculo.modelo} />
+					<InfoRow label="Ano" value={orcamento.veiculo.ano} />
+					<InfoRow label="Placa" value={orcamento.veiculo.placa} />
+					<InfoRow label="Km" value={orcamento.veiculo.km} />
+				</Card>
+
+				<Card style={{ gap: 4 }}>
+					<Label label={`Itens (${orcamento.itens.length})`} style={{ fontWeight: "700", marginBottom: 6 }} />
+					{orcamento.itens.map((item) => (
+						<View key={item.id} style={styles.itemRow}>
+							<View style={{ flex: 1 }}>
+								<Label label={item.descricao} style={{ fontSize: 14 }} />
+								<Label muted label={`${item.quantidade} × ${formatBRL(item.valorUnitario)}`} style={{ fontSize: 12 }} />
 							</View>
-						))}
-					</Card>
+							<Label label={formatBRL(item.quantidade * item.valorUnitario)} style={{ fontSize: 14, fontWeight: "600" }} />
+						</View>
+					))}
+				</Card>
 
-					<View style={styles.totalRow}>
-						<Label title="Total" />
-						<Label title={formatBRL(orcamento.total)} style={{ color: colors.yellow[400] }} />
-					</View>
-				</Content>
+				<View style={styles.totalRow}>
+					<Label title="Total" />
+					<Label title={formatBRL(orcamento.total)} style={{ color: colors.yellow[400] }} />
+				</View>
+			</Content>
 
-				<Button
-					title={gerandoPdf ? "Gerando PDF..." : "Compartilhar PDF"}
-					variant="outline"
-					disabled={gerandoPdf}
-					onPress={compartilharPdf}
-					icon={
-						gerandoPdf ? (
-							<ActivityIndicator color={colors.yellow[400]} />
-						) : (
-							<Icon name="file-pdf-box" size={20} color={colors.yellow[400]} />
-						)
-					}
-				/>
-			</Container>
-		</SafeAreaView>
+			<Button
+				title={gerandoPdf ? "Gerando PDF..." : "Compartilhar PDF"}
+				variant="outline"
+				disabled={gerandoPdf}
+				onPress={compartilharPdf}
+				icon={
+					gerandoPdf ? (
+						<ActivityIndicator color={colors.yellow[400]} />
+					) : (
+						<Icon name="file-pdf-box" size={20} color={colors.yellow[400]} />
+					)
+				}
+			/>
+		</Container>
 	);
 }
 

@@ -1,9 +1,7 @@
 import { NavigationProp, RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { Button, Container, Content, Input, Label, ScreenHeader, StepIndicator } from "@components";
-import { View, KeyboardAvoidingView, Platform, Alert } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { View, Alert } from "react-native";
 import { OrcamentoStackParamList } from "src/navigation/types";
-import { colors } from "src/styles/colors";
 import { isValidCpfCnpj, isValidTelefone, maskCpfCnpj, maskMilhar, maskTelefone } from "src/utils/validators";
 import React, { useState } from "react";
 
@@ -55,53 +53,49 @@ export default function OrcamentoClienteVeiculo() {
 	}
 
 	return (
-		<SafeAreaView style={{ flex: 1, backgroundColor: colors.background }} edges={['top']}>
-			<KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? "padding" : undefined}>
-				<Container>
-					<ScreenHeader
-						title={editando ? "Editar orçamento" : "Novo orçamento"}
-						subtitle="Etapa 1 · Cliente e veículo"
-						onBack={() => navigator.goBack()}
+		<Container>
+			<ScreenHeader
+				title={editando ? "Editar orçamento" : "Novo orçamento"}
+				subtitle="Etapa 1 · Cliente e veículo"
+				onBack={() => navigator.goBack()}
+			/>
+			<StepIndicator current={1} total={3} labels={["Dados", "Serviços", "Resumo"]} />
+
+			<Content style={{ gap: 28, paddingBottom: 100 }}>
+				<View style={{ gap: 10 }}>
+					<Label label="Dados do cliente" style={{ fontWeight: "700" }} />
+
+					<Input placeholder="Nome do cliente *" value={cliente} onChangeText={setCliente} />
+					<Input
+						placeholder="Telefone"
+						keyboardType="phone-pad"
+						value={telefone}
+						onChangeText={(v) => setTelefone(maskTelefone(v))}
+						maxLength={15}
 					/>
-					<StepIndicator current={1} total={3} labels={["Dados", "Serviços", "Resumo"]} />
+					<Input
+						placeholder="CPF / CNPJ"
+						keyboardType="numbers-and-punctuation"
+						value={cpfCnpj}
+						onChangeText={(v) => setCpfCnpj(maskCpfCnpj(v))}
+						maxLength={18}
+					/>
+				</View>
 
-					<Content style={{ gap: 28, paddingBottom: 100 }}>
-						<View style={{ gap: 10 }}>
-							<Label label="Dados do cliente" style={{ fontWeight: "700" }} />
+				<View style={{ gap: 10 }}>
+					<Label label="Dados do veículo" style={{ fontWeight: "700" }} />
 
-							<Input placeholder="Nome do cliente *" value={cliente} onChangeText={setCliente} />
-							<Input
-								placeholder="Telefone"
-								keyboardType="phone-pad"
-								value={telefone}
-								onChangeText={(v) => setTelefone(maskTelefone(v))}
-								maxLength={15}
-							/>
-							<Input
-								placeholder="CPF / CNPJ"
-								keyboardType="numbers-and-punctuation"
-								value={cpfCnpj}
-								onChangeText={(v) => setCpfCnpj(maskCpfCnpj(v))}
-								maxLength={18}
-							/>
-						</View>
+					<Input placeholder="Veículo * (ex.: Fiat Uno)" value={veiculo} onChangeText={setVeiculo} />
+					<Input placeholder="Modelo / versão" value={modelo} onChangeText={setModelo} />
+					<View style={{ flexDirection: 'row', gap: 8 }}>
+						<Input style={{ flex: 1 }} placeholder="Ano" keyboardType="number-pad" value={ano} onChangeText={setAno} />
+						<Input style={{ flex: 1.2 }} placeholder="Placa" autoCapitalize="characters" value={placa} onChangeText={(v) => setPlaca(v.toUpperCase())} />
+						<Input style={{ flex: 1 }} placeholder="Km" keyboardType="number-pad" value={km} onChangeText={(v) => setKm(maskMilhar(v))} />
+					</View>
+				</View>
+			</Content>
 
-						<View style={{ gap: 10 }}>
-							<Label label="Dados do veículo" style={{ fontWeight: "700" }} />
-
-							<Input placeholder="Veículo * (ex.: Fiat Uno)" value={veiculo} onChangeText={setVeiculo} />
-							<Input placeholder="Modelo / versão" value={modelo} onChangeText={setModelo} />
-							<View style={{ flexDirection: 'row', gap: 8 }}>
-								<Input style={{ flex: 1 }} placeholder="Ano" keyboardType="number-pad" value={ano} onChangeText={setAno} />
-								<Input style={{ flex: 1.2 }} placeholder="Placa" autoCapitalize="characters" value={placa} onChangeText={(v) => setPlaca(v.toUpperCase())} />
-								<Input style={{ flex: 1 }} placeholder="Km" keyboardType="number-pad" value={km} onChangeText={(v) => setKm(maskMilhar(v))} />
-							</View>
-						</View>
-					</Content>
-
-					<Button title="Avançar" onPress={avancar} />
-				</Container>
-			</KeyboardAvoidingView>
-		</SafeAreaView>
+			<Button title="Avançar" onPress={avancar} />
+		</Container>
 	);
 }

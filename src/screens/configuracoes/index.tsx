@@ -1,6 +1,5 @@
-import { View, StyleSheet, KeyboardAvoidingView, Platform, Alert, ActivityIndicator, Image, TouchableOpacity } from "react-native";
-import { Button, Card, Content, Input, Label } from "@components";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { StyleSheet, Alert, ActivityIndicator, Image, TouchableOpacity, View } from "react-native";
+import { Button, Card, Container, Content, Input, Label } from "@components";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { launchImageLibrary } from "react-native-image-picker";
 import { StorageService } from "src/services/storageService";
@@ -63,93 +62,81 @@ export default function Configuracoes() {
 
 	if (carregando) {
 		return (
-			<SafeAreaView style={[styles.safe, styles.center]} edges={['top']}>
+			<Container style={styles.center}>
 				<ActivityIndicator color={colors.yellow[400]} />
-			</SafeAreaView>
+			</Container>
 		);
 	}
 
 	return (
-		<SafeAreaView style={styles.safe} edges={['top']}>
-			<KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? "padding" : undefined}>
-				<View style={styles.container}>
-					<Label title="Configurações" style={{ marginBottom: 4 }} />
-					<Label muted label="Dados usados no cabeçalho dos orçamentos" style={{ fontSize: 13, marginBottom: 16 }} />
+		<Container>
+			<Label title="Configurações" style={{ marginBottom: 4 }} />
+			<Label muted label="Dados usados no cabeçalho dos orçamentos" style={{ fontSize: 13, marginBottom: 16 }} />
 
-					<Content style={{ gap: 16, paddingBottom: 100 }}>
-						<Card style={{ gap: 10 }}>
-							<View style={styles.cardHeader}>
-								<Icon name="image-outline" size={20} color={colors.yellow[400]} />
-								<Label label="Logo da empresa" style={{ fontWeight: "700" }} />
-							</View>
+			<Content style={{ gap: 16, paddingBottom: 100 }}>
+				<Card style={{ gap: 10 }}>
+					<View style={styles.cardHeader}>
+						<Icon name="image-outline" size={20} color={colors.yellow[400]} />
+						<Label label="Logo da empresa" style={{ fontWeight: "700" }} />
+					</View>
 
-							<View style={styles.logoRow}>
-								<TouchableOpacity style={styles.logoPreview} onPress={escolherLogo}>
-									<Image
-										source={dados.logoUri ? { uri: dados.logoUri } : require("../../assets/logo_app.png")}
-										style={styles.logoImage}
-									/>
-								</TouchableOpacity>
-
-								<View style={{ gap: 6 }}>
-									<Button
-										title={dados.logoUri ? "Alterar logo" : "Escolher logo"}
-										variant="outline"
-										onPress={escolherLogo}
-										style={styles.logoButton}
-									/>
-									{dados.logoUri ? (
-										<Button title="Remover logo" variant="ghost" onPress={removerLogo} style={styles.logoButton} />
-									) : null}
-								</View>
-							</View>
-						</Card>
-
-						<Card style={{ gap: 10 }}>
-							<View style={styles.cardHeader}>
-								<Icon name="wrench-outline" size={20} color={colors.yellow[400]} />
-								<Label label="Dados da oficina" style={{ fontWeight: "700" }} />
-							</View>
-
-							<Input placeholder="Nome da oficina" value={dados.nome} onChangeText={(v) => atualizar("nome", v)} />
-							<Input placeholder="Responsável" value={dados.responsavel} onChangeText={(v) => atualizar("responsavel", v)} />
-							<Input
-								placeholder="Telefone"
-								keyboardType="phone-pad"
-								value={dados.telefone}
-								onChangeText={(v) => atualizar("telefone", maskTelefone(v))}
-								maxLength={15}
+					<View style={styles.logoRow}>
+						<TouchableOpacity style={styles.logoPreview} onPress={escolherLogo}>
+							<Image
+								source={dados.logoUri ? { uri: dados.logoUri } : require("../../assets/logo_app.png")}
+								style={styles.logoImage}
 							/>
-							<Input placeholder="Endereço" value={dados.endereco} onChangeText={(v) => atualizar("endereco", v)} />
-							<Input
-								placeholder="CNPJ"
-								keyboardType="numbers-and-punctuation"
-								value={dados.cnpj}
-								onChangeText={(v) => atualizar("cnpj", maskCpfCnpj(v))}
-								maxLength={18}
-							/>
-						</Card>
-					</Content>
+						</TouchableOpacity>
 
-					<Button title="Salvar" onPress={salvar} icon={<Icon name="content-save-outline" size={20} color={colors.text.inverse} />} />
-				</View>
-			</KeyboardAvoidingView>
-		</SafeAreaView>
+						<View style={{ gap: 6 }}>
+							<Button
+								title={dados.logoUri ? "Alterar logo" : "Escolher logo"}
+								variant="outline"
+								onPress={escolherLogo}
+								style={styles.logoButton}
+							/>
+							{dados.logoUri ? (
+								<Button title="Remover logo" variant="ghost" onPress={removerLogo} style={styles.logoButton} />
+							) : null}
+						</View>
+					</View>
+				</Card>
+
+				<Card style={{ gap: 10 }}>
+					<View style={styles.cardHeader}>
+						<Icon name="wrench-outline" size={20} color={colors.yellow[400]} />
+						<Label label="Dados da oficina" style={{ fontWeight: "700" }} />
+					</View>
+
+					<Input placeholder="Nome da oficina" value={dados.nome} onChangeText={(v) => atualizar("nome", v)} />
+					<Input placeholder="Responsável" value={dados.responsavel} onChangeText={(v) => atualizar("responsavel", v)} />
+					<Input
+						placeholder="Telefone"
+						keyboardType="phone-pad"
+						value={dados.telefone}
+						onChangeText={(v) => atualizar("telefone", maskTelefone(v))}
+						maxLength={15}
+					/>
+					<Input placeholder="Endereço" value={dados.endereco} onChangeText={(v) => atualizar("endereco", v)} />
+					<Input
+						placeholder="CNPJ"
+						keyboardType="numbers-and-punctuation"
+						value={dados.cnpj}
+						onChangeText={(v) => atualizar("cnpj", maskCpfCnpj(v))}
+						maxLength={18}
+					/>
+				</Card>
+			</Content>
+
+			<Button title="Salvar" onPress={salvar} icon={<Icon name="content-save-outline" size={20} color={colors.text.inverse} />} />
+		</Container>
 	);
 }
 
 const styles = StyleSheet.create({
-	safe: {
-		flex: 1,
-		backgroundColor: colors.background,
-	},
 	center: {
 		alignItems: "center",
 		justifyContent: "center",
-	},
-	container: {
-		flex: 1,
-		padding: spacing.xl,
 	},
 	cardHeader: {
 		flexDirection: "row",
