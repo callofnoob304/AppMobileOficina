@@ -33,12 +33,12 @@ function montarHtml(orcamento: Orcamento, oficina: DadosOficina): string {
   const itensHtml = orcamento.itens
     .map(
       (item) => `
-        <tr>
-          <td>${escapeHtml(item.descricao)}</td>
-          <td class="center">${item.quantidade}</td>
-          <td class="right">${formatBRL(item.valorUnitario)}</td>
-          <td class="right">${formatBRL(item.quantidade * item.valorUnitario)}</td>
-        </tr>
+        <div class="item-linha">
+          <span class="col-desc">${escapeHtml(item.descricao)}</span>
+          <span class="col-qtd">${item.quantidade}</span>
+          <span class="col-valor">${formatBRL(item.valorUnitario)}</span>
+          <span class="col-subtotal">${formatBRL(item.quantidade * item.valorUnitario)}</span>
+        </div>
       `
     )
     .join("");
@@ -106,22 +106,27 @@ function montarHtml(orcamento: Orcamento, oficina: DadosOficina): string {
           table.info { width: 100%; border-collapse: collapse; }
           .info-label { font-size: 12px; color: #777; padding: 3px 0; width: 35%; }
           .info-valor { font-size: 13px; color: #1A1A1A; padding: 3px 0; font-weight: 600; }
-          table.itens { width: 100%; border-collapse: collapse; margin-top: 6px; }
-          table.itens th {
+          .itens-cabecalho, .item-linha {
+            display: flex;
+            align-items: center;
+          }
+          .itens-cabecalho {
             font-size: 11px;
             text-transform: uppercase;
             color: #777;
-            text-align: left;
             border-bottom: 2px solid #DDD;
             padding: 6px 4px;
+            margin-top: 6px;
           }
-          table.itens td {
+          .item-linha {
             font-size: 13px;
             padding: 8px 4px;
             border-bottom: 1px solid #EEE;
           }
-          .center { text-align: center; }
-          .right { text-align: right; }
+          .col-desc { flex: 1 1 0; padding-right: 8px; word-break: break-word; }
+          .col-qtd { flex: 0 0 40px; text-align: center; }
+          .col-valor { flex: 0 0 90px; text-align: right; }
+          .col-subtotal { flex: 0 0 90px; text-align: right; }
           .total-row {
             display: flex;
             justify-content: flex-end;
@@ -174,19 +179,13 @@ function montarHtml(orcamento: Orcamento, oficina: DadosOficina): string {
         </table>
 
         <div class="secao-titulo">Serviços e peças</div>
-        <table class="itens">
-          <thead>
-            <tr>
-              <th>Descrição</th>
-              <th class="center">Qtd</th>
-              <th class="right">Valor unit.</th>
-              <th class="right">Subtotal</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${itensHtml}
-          </tbody>
-        </table>
+        <div class="itens-cabecalho">
+          <span class="col-desc">Descrição</span>
+          <span class="col-qtd">Qtd</span>
+          <span class="col-valor">Valor unit.</span>
+          <span class="col-subtotal">Subtotal</span>
+        </div>
+        ${itensHtml}
 
         <div class="total-row">
           <span class="total-label">TOTAL</span>
