@@ -16,8 +16,22 @@ export const styles = StyleSheet.create({
 	},
 	validade: {
 		flexDirection: "row",
+		justifyContent: "space-between",
+		alignItems: "center",
+	},
+	validadeInfo: {
+		flexDirection: "row",
 		alignItems: "center",
 		gap: 6,
+	},
+	status: {
+		fontSize: 12,
+		fontWeight: "700",
+		textTransform: "uppercase",
+		letterSpacing: 0.5,
+	},
+	footer: {
+		gap: 12,
 	},
 	infoRow: {
 		flexDirection: "row",

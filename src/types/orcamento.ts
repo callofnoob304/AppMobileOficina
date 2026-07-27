@@ -21,10 +21,16 @@ export interface Veiculo {
   km: string;
 }
 
+// Pendente: criado e ainda não mexido. Atualizado: dados foram editados.
+// Concluído: trabalho finalizado — sai da Home e passa a aparecer no Histórico.
+export type StatusOrcamento = "Pendente" | "Atualizado" | "Concluído";
+
 export interface Orcamento {
   id: string;
   numero: number; // número sequencial amigável (ex.: #1042)
   criadoEm: number; // timestamp em ms
+  concluidoEm?: number; // timestamp em ms de quando virou "Concluído"
+  status: StatusOrcamento;
   cliente: Cliente;
   veiculo: Veiculo;
   itens: OrcamentoItem[];

@@ -17,6 +17,12 @@ export const styles = StyleSheet.create({
 		fontWeight: "700",
 		color: colors.yellow[400],
 	},
+	status: {
+		fontSize: 11,
+		fontWeight: "700",
+		textTransform: "uppercase",
+		letterSpacing: 0.5,
+	},
 	total: {
 		fontSize: 16,
 		fontWeight: "700",

@@ -90,7 +90,7 @@ export default function OrcamentoResumo() {
 			</Content>
 
 			<Button
-				title={salvando ? "Salvando..." : editando ? "Salvar alterações" : "Concluir orçamento"}
+				title={salvando ? "Salvando..." : editando ? "Salvar alterações" : "Salvar orçamento"}
 				onPress={concluir}
 				disabled={salvando}
 				icon={salvando ? <ActivityIndicator color={colors.text.inverse} /> : undefined}

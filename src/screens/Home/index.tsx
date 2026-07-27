@@ -25,7 +25,8 @@ export default function Home() {
 			OrcamentoService.listar(),
 			StorageService.get("oficina"),
 		]);
-		setOrcamentos(lista);
+		// A Home mostra apenas orçamentos ainda não concluídos; os concluídos ficam no Histórico.
+		setOrcamentos(lista.filter((o) => o.status !== "Concluído"));
 		setOficina(salvo ? { ...OFICINA_PADRAO, ...salvo } : OFICINA_PADRAO);
 		setCarregando(false);
 	}, []);

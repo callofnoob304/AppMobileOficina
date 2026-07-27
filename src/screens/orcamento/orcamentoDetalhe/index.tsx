@@ -7,6 +7,7 @@ import { OrcamentoService } from "src/services/orcamentoService";
 import { PdfService } from "src/services/pdfService";
 import { Orcamento } from "src/types/orcamento";
 import { formatBRL, formatDataHora, diasRestantes } from "src/utils/format";
+import { corStatus } from "src/utils/statusOrcamento";
 import { colors } from "src/styles/colors";
 import { styles } from "./styles";
 import React, { useEffect, useState } from "react";
@@ -28,6 +29,7 @@ export default function OrcamentoDetalhe() {
 	const [orcamento, setOrcamento] = useState<Orcamento | null>(null);
 	const [carregando, setCarregando] = useState(true);
 	const [gerandoPdf, setGerandoPdf] = useState(false);
+	const [concluindo, setConcluindo] = useState(false);
 
 	useEffect(() => {
 		OrcamentoService.buscarPorId(id).then((o) => {
@@ -46,6 +48,25 @@ export default function OrcamentoDetalhe() {
 		} finally {
 			setGerandoPdf(false);
 		}
+	}
+
+	function concluir() {
+		Alert.alert(
+			"Concluir orçamento",
+			"O orçamento sairá da tela inicial e passará a aparecer no Histórico. Deseja continuar?",
+			[
+				{ text: "Cancelar", style: "cancel" },
+				{
+					text: "Concluir",
+					onPress: async () => {
+						setConcluindo(true);
+						const atualizado = await OrcamentoService.concluir(id);
+						setOrcamento(atualizado);
+						setConcluindo(false);
+					},
+				},
+			]
+		);
 	}
 
 	function editar() {
@@ -92,7 +113,9 @@ export default function OrcamentoDetalhe() {
 		);
 	}
 
-	const dias = diasRestantes(orcamento.criadoEm);
+	const concluido = orcamento.status === "Concluído";
+	const inicioValidade = concluido && orcamento.concluidoEm ? orcamento.concluidoEm : orcamento.criadoEm;
+	const dias = diasRestantes(inicioValidade);
 
 	return (
 		<Container>
@@ -110,8 +133,11 @@ export default function OrcamentoDetalhe() {
 
 			<Content style={{ gap: 16, paddingBottom: 120 }}>
 				<View style={styles.validade}>
-					<Icon name="clock-outline" size={16} color={colors.yellow[400]} />
-					<Label muted label={dias > 0 ? `Expira em ${dias} dia${dias > 1 ? "s" : ""}` : "Expira hoje"} style={{ fontSize: 13 }} />
+					<Label label={orcamento.status} style={[styles.status, { color: corStatus(orcamento.status) }]} />
+					<View style={styles.validadeInfo}>
+						<Icon name="clock-outline" size={16} color={colors.yellow[400]} />
+						<Label muted label={dias > 0 ? `Expira em ${dias} dia${dias > 1 ? "s" : ""}` : "Expira hoje"} style={{ fontSize: 13 }} />
+					</View>
 				</View>
 
 				<Card style={{ gap: 6 }} highlight>
@@ -149,19 +175,35 @@ export default function OrcamentoDetalhe() {
 				</View>
 			</Content>
 
-			<Button
-				title={gerandoPdf ? "Gerando PDF..." : "Compartilhar PDF"}
-				variant="outline"
-				disabled={gerandoPdf}
-				onPress={compartilharPdf}
-				icon={
-					gerandoPdf ? (
-						<ActivityIndicator color={colors.yellow[400]} />
-					) : (
-						<Icon name="file-pdf-box" size={20} color={colors.yellow[400]} />
-					)
-				}
-			/>
+			<View style={styles.footer}>
+				{!concluido && (
+					<Button
+						title={concluindo ? "Concluindo..." : "Concluir orçamento"}
+						disabled={concluindo}
+						onPress={concluir}
+						icon={
+							concluindo ? (
+								<ActivityIndicator color={colors.text.inverse} />
+							) : (
+								<Icon name="check-circle-outline" size={20} color={colors.text.inverse} />
+							)
+						}
+					/>
+				)}
+				<Button
+					title={gerandoPdf ? "Gerando PDF..." : "Compartilhar PDF"}
+					variant="outline"
+					disabled={gerandoPdf}
+					onPress={compartilharPdf}
+					icon={
+						gerandoPdf ? (
+							<ActivityIndicator color={colors.yellow[400]} />
+						) : (
+							<Icon name="file-pdf-box" size={20} color={colors.yellow[400]} />
+						)
+					}
+				/>
+			</View>
 		</Container>
 	);
 }

@@ -18,7 +18,9 @@ export default function Historico() {
 
 	const carregar = useCallback(async () => {
 		setCarregando(true);
-		setOrcamentos(await OrcamentoService.listar());
+		const lista = await OrcamentoService.listar();
+		// O Histórico mostra apenas orçamentos concluídos; os demais ficam na Home.
+		setOrcamentos(lista.filter((o) => o.status === "Concluído"));
 		setCarregando(false);
 	}, []);
 
@@ -41,7 +43,7 @@ export default function Historico() {
 	return (
 		<Container>
 			<Label title="Histórico" style={{ marginBottom: 4 }} />
-			<Label muted label="Orçamentos salvos (últimos 10 dias)" style={{ fontSize: 13, marginBottom: 12 }} />
+			<Label muted label="Orçamentos concluídos (últimos 10 dias)" style={{ fontSize: 13, marginBottom: 12 }} />
 
 			<Input
 				placeholder="Buscar por cliente, veículo, placa ou nº"
@@ -65,7 +67,7 @@ export default function Historico() {
 				ListEmptyComponent={
 					<View style={styles.empty}>
 						<Icon name="folder-open-outline" size={44} color={colors.text.muted} />
-						<Label muted label={busca ? "Nenhum resultado para a busca." : "Nenhum orçamento salvo ainda."} center />
+						<Label muted label={busca ? "Nenhum resultado para a busca." : "Nenhum orçamento concluído ainda."} center />
 					</View>
 				}
 			/>

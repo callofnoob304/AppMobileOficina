@@ -2,6 +2,7 @@ import { View } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { colors } from "src/styles/colors";
 import { formatBRL, formatData } from "src/utils/format";
+import { corStatus } from "src/utils/statusOrcamento";
 import { Orcamento } from "src/types/orcamento";
 import Card from "src/components/card";
 import Label from "src/components/label";
@@ -21,6 +22,7 @@ export default function OrcamentoCard({ orcamento, onPress }: Props) {
 					<Label label={`Nº ${orcamento.numero}`} style={styles.numero} />
 					<Label muted label={formatData(orcamento.criadoEm)} style={{ fontSize: 12 }} />
 				</View>
+				<Label label={orcamento.status} style={[styles.status, { color: corStatus(orcamento.status) }]} />
 				<Label label={orcamento.cliente.nome} style={{ fontWeight: "700" }} numberOfLines={1} />
 				<Label
 					muted
