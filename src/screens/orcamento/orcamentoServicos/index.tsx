@@ -27,8 +27,8 @@ export default function OrcamentoServicos() {
 			Alert.alert("Descrição obrigatória", "Informe o serviço ou peça.");
 			return;
 		}
-		if (vlr <= 0) {
-			Alert.alert("Valor inválido", "Informe um valor maior que zero.");
+		if (vlr < 0) {
+			Alert.alert("Valor inválido", "Informe um valor maior ou igual à zero.");
 			return;
 		}
 
