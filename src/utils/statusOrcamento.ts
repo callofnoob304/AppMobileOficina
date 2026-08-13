@@ -6,9 +6,13 @@ export function corStatus(status: StatusOrcamento): string {
   switch (status) {
     case "Concluído":
       return colors.green[400];
+
     case "Atualizado":
-      return colors.yellow[400];
+      return colors.blue[300];
+
     case "Pendente":
+      return colors.yellow[400];
+
     default:
       return colors.text.muted;
   }

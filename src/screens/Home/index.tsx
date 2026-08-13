@@ -87,7 +87,7 @@ export default function Home() {
 					<Label label="Recentes" style={{ fontWeight: "700", fontSize: 18 }} />
 					{orcamentos.length > 0 && (
 						<TouchableOpacity onPress={irParaHistorico}>
-							<Label label="Ver todos" style={{ color: colors.yellow[400], fontSize: 14 }} />
+							<Label label="Ver concluídos" style={{ color: colors.yellow[400], fontSize: 14 }} />
 						</TouchableOpacity>
 					)}
 				</View>

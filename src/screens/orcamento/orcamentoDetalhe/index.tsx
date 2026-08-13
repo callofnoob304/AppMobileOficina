@@ -135,19 +135,19 @@ export default function OrcamentoDetalhe() {
 				<View style={styles.validade}>
 					<Label label={orcamento.status} style={[styles.status, { color: corStatus(orcamento.status) }]} />
 					<View style={styles.validadeInfo}>
-						<Icon name="clock-outline" size={16} color={colors.yellow[400]} />
+						<Icon name="clock-outline" size={16} color={corStatus(orcamento.status)} />
 						<Label muted label={dias > 0 ? `Expira em ${dias} dia${dias > 1 ? "s" : ""}` : "Expira hoje"} style={{ fontSize: 13 }} />
 					</View>
 				</View>
 
-				<Card style={{ gap: 6 }} highlight>
+				<Card style={{ gap: 6, borderLeftColor: corStatus(orcamento.status) }} highlight>
 					<Label label="Cliente" style={{ fontWeight: "700", marginBottom: 4 }} />
 					<InfoRow label="Nome" value={orcamento.cliente.nome} />
 					<InfoRow label="Telefone" value={orcamento.cliente.telefone} />
 					<InfoRow label="CPF/CNPJ" value={orcamento.cliente.cpfCnpj} />
 				</Card>
 
-				<Card style={{ gap: 6 }} highlight>
+				<Card style={{ gap: 6, borderLeftColor: corStatus(orcamento.status) }} highlight>
 					<Label label="Veículo" style={{ fontWeight: "700", marginBottom: 4 }} />
 					<InfoRow label="Veículo" value={orcamento.veiculo.nome} />
 					<InfoRow label="Modelo" value={orcamento.veiculo.modelo} />

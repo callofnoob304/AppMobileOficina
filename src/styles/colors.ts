@@ -10,9 +10,16 @@ export const colors = {
   // Amarelo da marca (destaques, botões, valores)
   yellow: {
     300: "#FFE066",
-    400: "#FFC933", // cor de destaque principal
+    400: "#FFC933",
     500: "#F2B705",
     600: "#D69E00",
+  },
+
+  blue: {
+    300: "#619df7",
+    400: "#1570f8",
+    500: "#0051ff",
+    600: "#03039b",
   },
 
   text: {

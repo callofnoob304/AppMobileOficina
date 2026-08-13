@@ -16,10 +16,10 @@ interface Props {
 
 export default function OrcamentoCard({ orcamento, onPress }: Props) {
 	return (
-		<Card onPress={onPress} highlight style={styles.card}>
+		<Card onPress={onPress} highlight style={[styles.card, { borderLeftColor: corStatus(orcamento.status) }]}>
 			<View style={{ flex: 1, gap: 2 }}>
 				<View style={styles.topRow}>
-					<Label label={`Nº ${orcamento.numero}`} style={styles.numero} />
+					<Label label={`Nº ${orcamento.numero}`} style={[styles.numero, { color: corStatus(orcamento.status) }]} />
 					<Label muted label={formatData(orcamento.criadoEm)} style={{ fontSize: 12 }} />
 				</View>
 				<Label label={orcamento.status} style={[styles.status, { color: corStatus(orcamento.status) }]} />
