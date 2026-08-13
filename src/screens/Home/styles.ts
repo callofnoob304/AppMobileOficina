@@ -1,24 +1,24 @@
-import { StyleSheet } from "react-native";
-import { spacing } from "src/styles/theme";
+import { spacing } from 'src/styles/theme';
+import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
 	content: {
 		padding: spacing.xl,
-		gap: spacing.lg,
 		paddingBottom: 40,
+		gap: spacing.lg,
 	},
 	header: {
-		flexDirection: "row",
-		alignItems: "center",
+		flexDirection: 'row',
+		alignItems: 'center',
 		gap: spacing.md,
 	},
 	logo: {
-		width: 52,
-		height: 52,
 		borderRadius: 12,
+		height: 52,
+		width: 52,
 	},
 	stats: {
-		flexDirection: "row",
+		flexDirection: 'row',
 		gap: spacing.md,
 	},
 	statCard: {
@@ -26,14 +26,14 @@ export const styles = StyleSheet.create({
 		gap: 4,
 	},
 	sectionHeader: {
-		flexDirection: "row",
-		justifyContent: "space-between",
-		alignItems: "center",
+		justifyContent: 'space-between',
 		marginTop: spacing.sm,
+		flexDirection: 'row',
+		alignItems: 'center',
 	},
 	empty: {
-		alignItems: "center",
-		gap: 8,
 		paddingVertical: spacing.xxl,
+		alignItems: 'center',
+		gap: 8,
 	},
 });

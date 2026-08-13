@@ -1,14 +1,14 @@
-import { NavigationProp, RouteProp, useNavigation, useRoute } from "@react-navigation/native";
-import { Button, Container, Content, Input, Label, ScreenHeader, StepIndicator } from "@components";
-import { View, Alert } from "react-native";
-import { OrcamentoStackParamList } from "src/navigation/types";
-import { isValidCpfCnpj, isValidTelefone, maskCpfCnpj, maskMilhar, maskTelefone } from "src/utils/validators";
-import { styles } from "./styles";
-import React, { useState } from "react";
+import { isValidCpfCnpj, isValidTelefone, maskCpfCnpj, maskMilhar, maskTelefone } from 'src/utils/validators';
+import { Button, Container, Content, Input, Label, ScreenHeader, StepIndicator } from '@components';
+import { NavigationProp, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { OrcamentoStackParamList } from 'src/navigation/types';
+import { View, Alert } from 'react-native';
+import React, { useState } from 'react';
+import { styles } from './styles';
 
 export default function OrcamentoClienteVeiculo() {
 	const navigator = useNavigation<NavigationProp<OrcamentoStackParamList>>();
-	const params = useRoute<RouteProp<OrcamentoStackParamList, "OrcamentoClienteVeiculo">>().params;
+	const params = useRoute<RouteProp<OrcamentoStackParamList, 'OrcamentoClienteVeiculo'>>().params;
 	const orcamentoId = params?.orcamentoId;
 	const editando = !!orcamentoId;
 
@@ -23,19 +23,19 @@ export default function OrcamentoClienteVeiculo() {
 
 	function avancar() {
 		if (!cliente.trim()) {
-			Alert.alert("Informe o cliente", "O nome do cliente é obrigatório para continuar.");
+			Alert.alert('Informe o cliente', 'O nome do cliente é obrigatório para continuar.');
 			return;
 		}
 		if (!veiculo.trim()) {
-			Alert.alert("Informe o veículo", "Descreva o veículo para continuar.");
+			Alert.alert('Informe o veículo', 'Descreva o veículo para continuar.');
 			return;
 		}
 		if (telefone.trim() && !isValidTelefone(telefone)) {
-			Alert.alert("Telefone inválido", "Informe um telefone com DDD (10 ou 11 dígitos).");
+			Alert.alert('Telefone inválido', 'Informe um telefone com DDD (10 ou 11 dígitos).');
 			return;
 		}
 		if (cpfCnpj.trim() && !isValidCpfCnpj(cpfCnpj)) {
-			Alert.alert("CPF/CNPJ inválido", "Confira o CPF ou CNPJ informado.");
+			Alert.alert('CPF/CNPJ inválido', 'Confira o CPF ou CNPJ informado.');
 			return;
 		}
 
@@ -56,42 +56,30 @@ export default function OrcamentoClienteVeiculo() {
 	return (
 		<Container>
 			<ScreenHeader
-				title={editando ? "Editar orçamento" : "Novo orçamento"}
+				title={editando ? 'Editar orçamento' : 'Novo orçamento'}
 				subtitle="Etapa 1 · Cliente e veículo"
 				onBack={() => navigator.goBack()}
 			/>
-			<StepIndicator current={1} total={3} labels={["Dados", "Serviços", "Resumo"]} />
+			<StepIndicator current={1} total={3} labels={['Dados', 'Serviços', 'Resumo']} />
 
 			<Content style={styles.content}>
 				<View style={styles.section}>
-					<Label label="Dados do cliente" style={{ fontWeight: "700" }} />
+					<Label label="Dados do cliente" style={{ fontWeight: '700' }} />
 
 					<Input placeholder="Nome do cliente *" value={cliente} onChangeText={setCliente} />
-					<Input
-						placeholder="Telefone"
-						keyboardType="phone-pad"
-						value={telefone}
-						onChangeText={(v) => setTelefone(maskTelefone(v))}
-						maxLength={15}
-					/>
-					<Input
-						placeholder="CPF / CNPJ"
-						keyboardType="numbers-and-punctuation"
-						value={cpfCnpj}
-						onChangeText={(v) => setCpfCnpj(maskCpfCnpj(v))}
-						maxLength={18}
-					/>
+					<Input placeholder="Telefone" keyboardType="phone-pad" value={telefone} onChangeText={v => setTelefone(maskTelefone(v))} maxLength={15} />
+					<Input placeholder="CPF / CNPJ" keyboardType="numbers-and-punctuation" value={cpfCnpj} onChangeText={v => setCpfCnpj(maskCpfCnpj(v))} maxLength={18} />
 				</View>
 
 				<View style={styles.section}>
-					<Label label="Dados do veículo" style={{ fontWeight: "700" }} />
+					<Label label="Dados do veículo" style={{ fontWeight: '700' }} />
 
 					<Input placeholder="Veículo * (ex.: Fiat Uno)" value={veiculo} onChangeText={setVeiculo} />
 					<Input placeholder="Modelo / versão" value={modelo} onChangeText={setModelo} />
 					<View style={styles.veiculoRow}>
 						<Input style={styles.flex1} placeholder="Ano" keyboardType="number-pad" value={ano} onChangeText={setAno} />
-						<Input style={styles.flex12} placeholder="Placa" autoCapitalize="characters" value={placa} onChangeText={(v) => setPlaca(v.toUpperCase())} />
-						<Input style={styles.flex1} placeholder="Km" keyboardType="number-pad" value={km} onChangeText={(v) => setKm(maskMilhar(v))} />
+						<Input style={styles.flex12} placeholder="Placa" autoCapitalize="characters" value={placa} onChangeText={v => setPlaca(v.toUpperCase())}/>
+						<Input style={styles.flex1} placeholder="Km" keyboardType="number-pad" value={km} onChangeText={v => setKm(maskMilhar(v))}/>
 					</View>
 				</View>
 			</Content>

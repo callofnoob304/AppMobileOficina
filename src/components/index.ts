@@ -1,21 +1,11 @@
-import Container from "./container"
-import Content from "./content"
-import Button from "./button"
-import Input from "./input"
-import Label from "./label"
-import Card from "./card"
-import ScreenHeader from "./screenHeader"
-import StepIndicator from "./stepIndicator"
-import OrcamentoCard from "./orcamentoCard"
+import StepIndicator from './stepIndicator';
+import OrcamentoCard from './orcamentoCard';
+import ScreenHeader from './screenHeader';
+import Container from './container';
+import Content from './content';
+import Button from './button';
+import Input from './input';
+import Label from './label';
+import Card from './card';
 
-export {
-	Container,
-	Content,
-	Button,
-	Input,
-	Label,
-	Card,
-	ScreenHeader,
-	StepIndicator,
-	OrcamentoCard
-}
+export { StepIndicator, OrcamentoCard, ScreenHeader, Container, Content, Button, Input, Label, Card };

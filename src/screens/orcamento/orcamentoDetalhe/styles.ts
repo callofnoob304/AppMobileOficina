@@ -1,56 +1,56 @@
-import { StyleSheet } from "react-native";
-import { colors } from "src/styles/colors";
+import { colors } from 'src/styles/colors';
+import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
 	headerActions: {
-		flexDirection: "row",
-		alignItems: "center",
+		flexDirection: 'row',
+		alignItems: 'center',
 		gap: 18,
 	},
 	center: {
-		flex: 1,
-		alignItems: "center",
-		justifyContent: "center",
-		gap: 8,
 		backgroundColor: colors.background,
+		justifyContent: 'center',
+		alignItems: 'center',
+		flex: 1,
+		gap: 8,
 	},
 	validade: {
-		flexDirection: "row",
-		justifyContent: "space-between",
-		alignItems: "center",
+		justifyContent: 'space-between',
+		flexDirection: 'row',
+		alignItems: 'center',
 	},
 	validadeInfo: {
-		flexDirection: "row",
-		alignItems: "center",
+		flexDirection: 'row',
+		alignItems: 'center',
 		gap: 6,
 	},
 	status: {
-		fontSize: 12,
-		fontWeight: "700",
-		textTransform: "uppercase",
+		textTransform: 'uppercase',
 		letterSpacing: 0.5,
+		fontWeight: '700',
+		fontSize: 12,
 	},
 	footer: {
 		gap: 12,
 	},
 	infoRow: {
-		flexDirection: "row",
-		justifyContent: "space-between",
-		alignItems: "center",
+		justifyContent: 'space-between',
+		flexDirection: 'row',
+		alignItems: 'center',
 		gap: 12,
 	},
 	itemRow: {
-		flexDirection: "row",
-		alignItems: "center",
-		justifyContent: "space-between",
-		paddingVertical: 6,
-		borderBottomWidth: 1,
 		borderBottomColor: colors.border,
+		justifyContent: 'space-between',
+		flexDirection: 'row',
+		alignItems: 'center',
+		borderBottomWidth: 1,
+		paddingVertical: 6,
 	},
 	totalRow: {
-		flexDirection: "row",
-		justifyContent: "space-between",
-		alignItems: "center",
+		justifyContent: 'space-between',
+		flexDirection: 'row',
+		alignItems: 'center',
 		paddingHorizontal: 4,
 	},
 });

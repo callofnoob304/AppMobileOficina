@@ -1,18 +1,18 @@
-import { NavigationProp, RouteProp, useNavigation, useRoute } from "@react-navigation/native";
-import { Button, Container, Content, Input, Label, Card, ScreenHeader, StepIndicator } from "@components";
-import { FlatList, TouchableOpacity, View, Alert } from "react-native";
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { OrcamentoStackParamList } from "src/navigation/types";
-import { OrcamentoItem } from "src/types/orcamento";
-import { calcularTotal } from "src/services/orcamentoService";
-import { formatBRL, parseValor } from "src/utils/format";
-import { colors } from "src/styles/colors";
-import { styles } from "./styles";
-import React from "react";
+import { Button, Container, Content, Input, Label, Card, ScreenHeader, StepIndicator } from '@components';
+import { NavigationProp, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { FlatList, TouchableOpacity, View, Alert } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { OrcamentoStackParamList } from 'src/navigation/types';
+import { calcularTotal } from 'src/services/orcamentoService';
+import { formatBRL, parseValor } from 'src/utils/format';
+import { OrcamentoItem } from 'src/types/orcamento';
+import { colors } from 'src/styles/colors';
+import { styles } from './styles';
+import React from 'react';
 
 export default function OrcamentoServicos() {
 	const navigator = useNavigation<NavigationProp<OrcamentoStackParamList>>();
-	const { orcamentoId, cliente, veiculo, itens: itensIniciais } = useRoute<RouteProp<OrcamentoStackParamList, "OrcamentoServicos">>().params;
+	const { orcamentoId, cliente, veiculo, itens: itensIniciais } = useRoute<RouteProp<OrcamentoStackParamList, 'OrcamentoServicos'>>().params;
 
 	const [quantidade, setQuantidade] = React.useState('');
 	const [itens, setItens] = React.useState<OrcamentoItem[]>(itensIniciais ?? []);
@@ -24,11 +24,11 @@ export default function OrcamentoServicos() {
 		const vlr = parseValor(valor);
 
 		if (!descricao.trim()) {
-			Alert.alert("Descrição obrigatória", "Informe o serviço ou peça.");
+			Alert.alert('Descrição obrigatória', 'Informe o serviço ou peça.');
 			return;
 		}
 		if (vlr < 0) {
-			Alert.alert("Valor inválido", "Informe um valor maior ou igual à zero.");
+			Alert.alert('Valor inválido', 'Informe um valor maior ou igual à zero.');
 			return;
 		}
 
@@ -53,7 +53,7 @@ export default function OrcamentoServicos() {
 
 	function avancar() {
 		if (itens.length === 0) {
-			Alert.alert("Adicione itens", "Inclua ao menos um serviço ou peça no orçamento.");
+			Alert.alert('Adicione itens', 'Inclua ao menos um serviço ou peça no orçamento.');
 			return;
 		}
 		navigator.navigate('OrcamentoResumo', { orcamentoId, cliente, veiculo, itens });
@@ -65,7 +65,7 @@ export default function OrcamentoServicos() {
 				<Label label={item.descricao} />
 				<Label muted label={`${item.quantidade} × ${formatBRL(item.valorUnitario)}`} style={{ fontSize: 13 }} />
 			</View>
-			<Label label={formatBRL(item.quantidade * item.valorUnitario)} style={{ fontWeight: "700" }} />
+			<Label label={formatBRL(item.quantidade * item.valorUnitario)} style={{ fontWeight: '700' }} />
 			<TouchableOpacity onPress={() => removerItem(item.id)} hitSlop={8} style={{ marginLeft: 12 }}>
 				<Icon name="trash-can-outline" size={22} color={colors.red[400]} />
 			</TouchableOpacity>
@@ -75,11 +75,11 @@ export default function OrcamentoServicos() {
 	return (
 		<Container>
 			<ScreenHeader title="Serviços e peças" subtitle="Etapa 2 · Itens do orçamento" onBack={() => navigator.goBack()} />
-			<StepIndicator current={2} total={3} labels={["Dados", "Serviços", "Resumo"]} />
+			<StepIndicator current={2} total={3} labels={['Dados', 'Serviços', 'Resumo']} />
 
 			<Content style={{ gap: 20, paddingBottom: 120 }}>
 				<Card style={{ gap: 10 }}>
-					<Label label="Adicionar item" style={{ fontWeight: "700" }} />
+					<Label label="Adicionar item" style={{ fontWeight: '700' }} />
 					<Input placeholder="Serviço ou peça" value={descricao} onChangeText={setDescricao} />
 					<View style={{ flexDirection: 'row', gap: 8, alignItems: 'center' }}>
 						<Input style={{ flex: 1 }} placeholder="Qtd" keyboardType="number-pad" value={quantidade} onChangeText={setQuantidade} />
@@ -91,12 +91,8 @@ export default function OrcamentoServicos() {
 				</Card>
 
 				<View>
-					<Label label={`Itens (${itens.length})`} style={{ fontWeight: "700", marginBottom: 8 }} />
-					<FlatList
-						data={itens}
-						keyExtractor={(item) => item.id}
-						renderItem={renderItem}
-						scrollEnabled={false}
+					<Label label={`Itens (${itens.length})`} style={{ fontWeight: '700', marginBottom: 8 }} />
+					<FlatList data={itens} keyExtractor={item => item.id} renderItem={renderItem} scrollEnabled={false}
 						ListEmptyComponent={
 							<View style={styles.empty}>
 								<Icon name="clipboard-text-outline" size={32} color={colors.text.muted} />

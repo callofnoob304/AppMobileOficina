@@ -1,33 +1,33 @@
-import { StyleSheet } from "react-native";
-import { colors } from "src/styles/colors";
+import { colors } from 'src/styles/colors';
+import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
 	row: {
+		borderBottomColor: colors.border,
 		flexDirection: 'row',
 		alignItems: 'center',
-		paddingVertical: 12,
 		borderBottomWidth: 1,
-		borderBottomColor: colors.border,
+		paddingVertical: 12,
 	},
 	addButton: {
 		backgroundColor: colors.yellow[400],
 		justifyContent: 'center',
 		alignItems: 'center',
-		width: 52,
-		height: 52,
 		borderRadius: 12,
+		height: 52,
+		width: 52,
 	},
 	empty: {
 		alignItems: 'center',
-		gap: 8,
 		paddingVertical: 24,
+		gap: 8,
 	},
 	footer: {
 		gap: 12,
 	},
 	totalRow: {
-		flexDirection: 'row',
 		justifyContent: 'space-between',
+		flexDirection: 'row',
 		alignItems: 'center',
 	},
 });

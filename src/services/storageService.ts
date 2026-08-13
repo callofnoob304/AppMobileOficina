@@ -1,19 +1,16 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Orcamento } from '../types/orcamento';
 import { DadosOficina } from '../types/oficina';
+import { Orcamento } from '../types/orcamento';
 
-// Define todas as chaves possíveis e seus tipos
 export type StorageKeyType = {
 	orcamentos: Orcamento[];
 	ultimoNumero: number;
 	oficina: DadosOficina;
 };
 
-// Função auxiliar para padronizar o caminho da chave
 const KeyPath = (key: keyof StorageKeyType) => `@app:${key}`;
 
 export class StorageService {
-	// Salvar dado
 	static async set<K extends keyof StorageKeyType>(key: K, value: StorageKeyType[K]) {
 		try {
 			await AsyncStorage.setItem(KeyPath(key), JSON.stringify(value));
@@ -22,7 +19,6 @@ export class StorageService {
 		}
 	}
 
-	// Buscar dado
 	static async get<K extends keyof StorageKeyType>(key: K): Promise<StorageKeyType[K] | null> {
 		try {
 			const data = await AsyncStorage.getItem(KeyPath(key));
@@ -33,7 +29,6 @@ export class StorageService {
 		}
 	}
 
-	// Remover dado
 	static async clear<K extends keyof StorageKeyType>(key: K) {
 		try {
 			await AsyncStorage.removeItem(KeyPath(key));
@@ -42,7 +37,6 @@ export class StorageService {
 		}
 	}
 
-	// Limpar tudo (opcional)
 	static async clearAll() {
 		try {
 			await AsyncStorage.clear();

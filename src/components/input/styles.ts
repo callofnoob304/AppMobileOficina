@@ -1,15 +1,15 @@
-import { StyleSheet } from "react-native";
-import { colors } from "src/styles/colors";
-import { radius, spacing } from "src/styles/theme";
+import { radius, spacing } from 'src/styles/theme';
+import { colors } from 'src/styles/colors';
+import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
 	input: {
-		borderWidth: 1,
-		borderColor: colors.border,
 		backgroundColor: colors.surface,
+		borderColor: colors.border,
+		color: colors.text.primary,
 		borderRadius: radius.md,
 		padding: spacing.lg,
-		color: colors.text.primary,
+		borderWidth: 1,
 		fontSize: 16,
 	},
 });

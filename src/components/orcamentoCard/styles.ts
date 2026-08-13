@@ -1,31 +1,31 @@
-import { StyleSheet } from "react-native";
-import { colors } from "src/styles/colors";
+import { colors } from 'src/styles/colors';
+import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
 	card: {
-		flexDirection: "row",
-		alignItems: "center",
+		flexDirection: 'row',
+		alignItems: 'center',
 		gap: 8,
 	},
 	topRow: {
-		flexDirection: "row",
-		justifyContent: "space-between",
-		alignItems: "center",
+		justifyContent: 'space-between',
+		flexDirection: 'row',
+		alignItems: 'center',
 	},
 	numero: {
-		fontSize: 12,
-		fontWeight: "700",
 		color: colors.yellow[400],
+		fontWeight: '700',
+		fontSize: 12,
 	},
 	status: {
-		fontSize: 11,
-		fontWeight: "700",
-		textTransform: "uppercase",
+		textTransform: 'uppercase',
 		letterSpacing: 0.5,
+		fontWeight: '700',
+		fontSize: 11,
 	},
 	total: {
+		fontWeight: '700',
 		fontSize: 16,
-		fontWeight: "700",
 		marginTop: 4,
 	},
 });

@@ -1,17 +1,17 @@
-import OrcamentoClienteVeiculo from "src/screens/orcamento/orcamentoClienteVeiculo";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import OrcamentoServicos from "src/screens/orcamento/orcamentoServicos";
-import OrcamentoDetalhe from "src/screens/orcamento/orcamentoDetalhe";
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import OrcamentoResumo from "src/screens/orcamento/orcamentoResumo";
-import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { colors } from "../styles/colors";
-import Configuracoes from "../screens/configuracoes";
-import Historico from "../screens/historico";
-import Home from "../screens/home";
-import React from "react";
+import OrcamentoClienteVeiculo from 'src/screens/orcamento/orcamentoClienteVeiculo';
+import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import OrcamentoServicos from 'src/screens/orcamento/orcamentoServicos';
+import OrcamentoDetalhe from 'src/screens/orcamento/orcamentoDetalhe';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import OrcamentoResumo from 'src/screens/orcamento/orcamentoResumo';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import Configuracoes from '../screens/configuracoes';
+import Historico from '../screens/historico';
+import { colors } from '../styles/colors';
+import Home from '../screens/home';
+import React from 'react';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -74,12 +74,12 @@ export default function Routes() {
 					},
 					tabBarIcon: ({ color, size }) => {
 						const icons: Record<string, string> = {
-							Início: "home",
-							Histórico: "history",
-							Configurações: "cog-outline",
+							Início: 'home',
+							Histórico: 'history',
+							Configurações: 'cog-outline',
 						};
 
-						const iconName = icons[route.name] ?? "help-circle";
+						const iconName = icons[route.name] ?? 'help-circle';
 
 						return <Icon name={iconName} size={size} color={color} />;
 					},

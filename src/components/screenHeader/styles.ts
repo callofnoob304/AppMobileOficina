@@ -1,19 +1,19 @@
-import { StyleSheet } from "react-native";
-import { colors } from "src/styles/colors";
-import { spacing } from "src/styles/theme";
+import { colors } from 'src/styles/colors';
+import { spacing } from 'src/styles/theme';
+import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
 	container: {
-		flexDirection: "row",
-		alignItems: "center",
-		justifyContent: "space-between",
+		justifyContent: 'space-between',
 		marginBottom: spacing.lg,
+		flexDirection: 'row',
+		alignItems: 'center',
 	},
 	left: {
-		flexDirection: "row",
-		alignItems: "center",
-		flex: 1,
+		flexDirection: 'row',
+		alignItems: 'center',
 		gap: spacing.xs,
+		flex: 1,
 	},
 	back: {
 		marginLeft: -6,
@@ -22,13 +22,13 @@ export const styles = StyleSheet.create({
 		flex: 1,
 	},
 	title: {
-		fontSize: 22,
-		fontWeight: "bold",
 		color: colors.text.primary,
+		fontWeight: 'bold',
+		fontSize: 22,
 	},
 	subtitle: {
-		fontSize: 14,
 		color: colors.text.secondary,
+		fontSize: 14,
 		marginTop: 2,
 	},
 });

@@ -1,29 +1,29 @@
-import { StyleSheet } from "react-native";
-import { colors } from "src/styles/colors";
+import { colors } from 'src/styles/colors';
+import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
 	row: {
-		flexDirection: "row",
-		justifyContent: "space-between",
-		alignItems: "center",
+		justifyContent: 'space-between',
+		flexDirection: 'row',
+		alignItems: 'center',
 	},
 	column: {
 		gap: 4,
 	},
 	title: {
-		fontSize: 20,
-		fontWeight: "bold",
 		color: colors.text.primary,
+		fontWeight: 'bold',
+		fontSize: 20,
 	},
 	label: {
-		fontSize: 16,
 		color: colors.text.primary,
+		fontSize: 16,
 	},
 	muted: {
 		color: colors.text.secondary,
 	},
 	center: {
-		alignSelf: "center",
-		textAlign: "center",
+		alignSelf: 'center',
+		textAlign: 'center',
 	},
 });

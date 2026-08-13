@@ -1,24 +1,18 @@
-import { generatePDF } from "react-native-html-to-pdf";
-import Share from "react-native-share";
-import { Orcamento } from "../types/orcamento";
-import { DadosOficina, OFICINA_PADRAO } from "../types/oficina";
-import { StorageService } from "./storageService";
-import { formatBRL, formatDataHora, diasRestantes } from "../utils/format";
-
-// Geração e compartilhamento do orçamento em PDF.
+import { formatBRL, formatDataHora, diasRestantes } from '../utils/format';
+import { DadosOficina, OFICINA_PADRAO } from '../types/oficina';
+import { generatePDF } from 'react-native-html-to-pdf';
+import { StorageService } from './storageService';
+import { Orcamento } from '../types/orcamento';
+import Share from 'react-native-share';
 
 function escapeHtml(texto?: string): string {
-  if (!texto) return "";
-  return texto
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
+	if (!texto) return '';
+	return texto.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
 function linhaInfo(label: string, valor?: string): string {
-  if (!valor) return "";
-  return `
+	if (!valor) return '';
+	return `
     <tr>
       <td class="info-label">${escapeHtml(label)}</td>
       <td class="info-valor">${escapeHtml(valor)}</td>
@@ -27,23 +21,23 @@ function linhaInfo(label: string, valor?: string): string {
 }
 
 function montarHtml(orcamento: Orcamento, oficina: DadosOficina): string {
-  const dias = diasRestantes(orcamento.criadoEm);
-  const validadeTexto = dias > 0 ? `Válido por mais ${dias} dia${dias > 1 ? "s" : ""}` : "Expira hoje";
+	const dias = diasRestantes(orcamento.criadoEm);
+	const validadeTexto = dias > 0 ? `Válido por mais ${dias} dia${dias > 1 ? 's' : ''}` : 'Expira hoje';
 
-  const itensHtml = orcamento.itens
-    .map(
-      (item) => `
-        <div class="item-linha">
-          <span class="col-desc">${escapeHtml(item.descricao)}</span>
-          <span class="col-qtd">${item.quantidade}</span>
-          <span class="col-valor">${formatBRL(item.valorUnitario)}</span>
-          <span class="col-subtotal">${formatBRL(item.quantidade * item.valorUnitario)}</span>
-        </div>
-      `
-    )
-    .join("");
+	const itensHtml = orcamento.itens
+		.map(
+			item => `
+		        <div class="item-linha">
+		          <span class="col-desc">${escapeHtml(item.descricao)}</span>
+		          <span class="col-qtd">${item.quantidade}</span>
+		          <span class="col-valor">${formatBRL(item.valorUnitario)}</span>
+		          <span class="col-subtotal">${formatBRL(item.quantidade * item.valorUnitario)}</span>
+		        </div>
+	      `,
+		)
+	.join('');
 
-  return `
+	return `
     <!DOCTYPE html>
     <html>
       <head>
@@ -150,10 +144,10 @@ function montarHtml(orcamento: Orcamento, oficina: DadosOficina): string {
         <div class="header">
           <div>
             <p class="oficina-nome">${escapeHtml(oficina.nome)}</p>
-            ${oficina.responsavel ? `<p class="oficina-dado">${escapeHtml(oficina.responsavel)}</p>` : ""}
-            ${oficina.telefone ? `<p class="oficina-dado">Tel: ${escapeHtml(oficina.telefone)}</p>` : ""}
-            ${oficina.endereco ? `<p class="oficina-dado">${escapeHtml(oficina.endereco)}</p>` : ""}
-            ${oficina.cnpj ? `<p class="oficina-dado">CNPJ: ${escapeHtml(oficina.cnpj)}</p>` : ""}
+            ${oficina.responsavel ? `<p class="oficina-dado">${escapeHtml(oficina.responsavel)}</p>` : ''}
+            ${oficina.telefone ? `<p class="oficina-dado">Tel: ${escapeHtml(oficina.telefone)}</p>` : ''}
+            ${oficina.endereco ? `<p class="oficina-dado">${escapeHtml(oficina.endereco)}</p>` : ''}
+            ${oficina.cnpj ? `<p class="oficina-dado">CNPJ: ${escapeHtml(oficina.cnpj)}</p>` : ''}
           </div>
           <div>
             <p class="orcamento-numero">Orçamento Nº ${orcamento.numero}</p>
@@ -164,18 +158,18 @@ function montarHtml(orcamento: Orcamento, oficina: DadosOficina): string {
 
         <div class="secao-titulo">Cliente</div>
         <table class="info">
-          ${linhaInfo("Nome", orcamento.cliente.nome)}
-          ${linhaInfo("Telefone", orcamento.cliente.telefone)}
-          ${linhaInfo("CPF/CNPJ", orcamento.cliente.cpfCnpj)}
+          ${linhaInfo('Nome', orcamento.cliente.nome)}
+          ${linhaInfo('Telefone', orcamento.cliente.telefone)}
+          ${linhaInfo('CPF/CNPJ', orcamento.cliente.cpfCnpj)}
         </table>
 
         <div class="secao-titulo">Veículo</div>
         <table class="info">
-          ${linhaInfo("Veículo", orcamento.veiculo.nome)}
-          ${linhaInfo("Modelo", orcamento.veiculo.modelo)}
-          ${linhaInfo("Ano", orcamento.veiculo.ano)}
-          ${linhaInfo("Placa", orcamento.veiculo.placa)}
-          ${linhaInfo("Km", orcamento.veiculo.km)}
+          ${linhaInfo('Veículo', orcamento.veiculo.nome)}
+          ${linhaInfo('Modelo', orcamento.veiculo.modelo)}
+          ${linhaInfo('Ano', orcamento.veiculo.ano)}
+          ${linhaInfo('Placa', orcamento.veiculo.placa)}
+          ${linhaInfo('Km', orcamento.veiculo.km)}
         </table>
 
         <div class="secao-titulo">Serviços e peças</div>
@@ -199,30 +193,28 @@ function montarHtml(orcamento: Orcamento, oficina: DadosOficina): string {
 }
 
 export const PdfService = {
-  // Gera o PDF do orçamento e devolve o caminho do arquivo salvo.
-  async gerar(orcamento: Orcamento): Promise<string> {
-    const oficina = (await StorageService.get("oficina")) ?? OFICINA_PADRAO;
-    const html = montarHtml(orcamento, oficina);
+	async gerar(orcamento: Orcamento): Promise<string> {
+		const oficina = (await StorageService.get('oficina')) ?? OFICINA_PADRAO;
+		const html = montarHtml(orcamento, oficina);
 
-    const resultado = await generatePDF({
-      html,
-      fileName: `orcamento-${orcamento.numero}`,
-      base64: false,
-    });
+		const resultado = await generatePDF({
+			html,
+			fileName: `orcamento-${orcamento.numero}`,
+			base64: false,
+		});
 
-    return resultado.filePath;
-  },
+		return resultado.filePath;
+	},
 
-  // Gera o PDF e abre a folha de compartilhamento nativa.
-  async compartilhar(orcamento: Orcamento): Promise<void> {
-    const filePath = await this.gerar(orcamento);
+	async compartilhar(orcamento: Orcamento): Promise<void> {
+		const filePath = await this.gerar(orcamento);
 
-    await Share.open({
-      title: `Orçamento Nº ${orcamento.numero}`,
-      url: `file://${filePath}`,
-      type: "application/pdf",
-      filename: `Orcamento_${orcamento.numero}`,
-      failOnCancel: false,
-    });
-  },
+		await Share.open({
+			title: `Orçamento Nº ${orcamento.numero}`,
+			url: `file://${filePath}`,
+			type: 'application/pdf',
+			filename: `Orcamento_${orcamento.numero}`,
+			failOnCancel: false,
+		});
+	},
 };

@@ -1,19 +1,19 @@
-import { StyleSheet } from "react-native";
-import { colors } from "src/styles/colors";
-import { spacing } from "src/styles/theme";
+import { colors } from 'src/styles/colors';
+import { spacing } from 'src/styles/theme';
+import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
 	safeArea: {
-		flex: 1,
 		backgroundColor: colors.background,
+		flex: 1,
 	},
 	flex: {
 		flex: 1,
 	},
 	container: {
-		flex: 1,
-		padding: spacing.xl,
 		backgroundColor: colors.background,
+		padding: spacing.xl,
+		flex: 1,
 	},
 	noPadding: {
 		padding: 0,

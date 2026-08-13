@@ -1,8 +1,8 @@
-import { TouchableOpacity, TouchableOpacityProps, Text, View } from "react-native";
-import { styles } from "./styles";
-import React from "react";
+import { TouchableOpacity, TouchableOpacityProps, Text, View } from 'react-native';
+import { styles } from './styles';
+import React from 'react';
 
-type Variant = "primary" | "outline" | "ghost";
+type Variant = 'primary' | 'outline' | 'ghost';
 
 interface ButtonProps extends TouchableOpacityProps {
 	title: string;
@@ -11,14 +11,14 @@ interface ButtonProps extends TouchableOpacityProps {
 	icon?: React.ReactNode;
 }
 
-export default function Button({ title, variant = "primary", bgColor, icon, style, disabled, ...rest }: ButtonProps) {
+export default function Button({ title, variant = 'primary', bgColor, icon, style, disabled, ...rest }: ButtonProps) {
 	return (
 		<TouchableOpacity
 			style={[
 				styles.button,
-				variant === "primary" && styles.primary,
-				variant === "outline" && styles.outline,
-				variant === "ghost" && styles.ghost,
+				variant === 'primary' && styles.primary,
+				variant === 'outline' && styles.outline,
+				variant === 'ghost' && styles.ghost,
 				bgColor ? { backgroundColor: bgColor } : null,
 				disabled && styles.disabled,
 				style,
@@ -32,8 +32,8 @@ export default function Button({ title, variant = "primary", bgColor, icon, styl
 				<Text
 					style={[
 						styles.text,
-						variant === "primary" && styles.textPrimary,
-						(variant === "outline" || variant === "ghost") && styles.textAccent,
+						variant === 'primary' && styles.textPrimary,
+						(variant === 'outline' || variant === 'ghost') && styles.textAccent,
 					]}
 				>
 					{title}

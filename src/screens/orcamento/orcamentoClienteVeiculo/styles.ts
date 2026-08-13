@@ -1,15 +1,15 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
 	content: {
-		gap: 28,
 		paddingBottom: 100,
+		gap: 28,
 	},
 	section: {
 		gap: 10,
 	},
 	veiculoRow: {
-		flexDirection: "row",
+		flexDirection: 'row',
 		gap: 8,
 	},
 	flex1: {

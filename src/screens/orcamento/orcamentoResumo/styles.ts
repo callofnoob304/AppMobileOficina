@@ -1,25 +1,25 @@
-import { StyleSheet } from "react-native";
-import { colors } from "src/styles/colors";
+import { colors } from 'src/styles/colors';
+import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
 	infoRow: {
-		flexDirection: "row",
-		justifyContent: "space-between",
-		alignItems: "center",
+		justifyContent: 'space-between',
+		flexDirection: 'row',
+		alignItems: 'center',
 		gap: 12,
 	},
 	itemRow: {
-		flexDirection: "row",
-		alignItems: "center",
-		justifyContent: "space-between",
-		paddingVertical: 6,
-		borderBottomWidth: 1,
 		borderBottomColor: colors.border,
+		justifyContent: 'space-between',
+		flexDirection: 'row',
+		alignItems: 'center',
+		borderBottomWidth: 1,
+		paddingVertical: 6,
 	},
 	totalRow: {
-		flexDirection: "row",
-		justifyContent: "space-between",
-		alignItems: "center",
+		justifyContent: 'space-between',
+		flexDirection: 'row',
+		alignItems: 'center',
 		paddingHorizontal: 4,
 	},
 });

@@ -1,40 +1,40 @@
-import { StyleSheet } from "react-native";
-import { colors } from "src/styles/colors";
-import { radius, spacing } from "src/styles/theme";
+import { radius, spacing } from 'src/styles/theme';
+import { colors } from 'src/styles/colors';
+import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
 	center: {
-		alignItems: "center",
-		justifyContent: "center",
+		justifyContent: 'center',
+		alignItems: 'center',
 	},
 	cardHeader: {
-		flexDirection: "row",
-		alignItems: "center",
-		gap: 8,
+		flexDirection: 'row',
+		alignItems: 'center',
 		marginBottom: 4,
+		gap: 8,
 	},
 	logoRow: {
-		flexDirection: "row",
-		alignItems: "center",
+		flexDirection: 'row',
+		alignItems: 'center',
 		gap: spacing.md,
 	},
 	logoPreview: {
-		width: 72,
-		height: 72,
-		borderRadius: radius.md,
-		borderWidth: 1,
-		borderColor: colors.border,
 		backgroundColor: colors.surfaceAlt,
-		alignItems: "center",
-		justifyContent: "center",
-		overflow: "hidden",
+		borderColor: colors.border,
+		justifyContent: 'center',
+		borderRadius: radius.md,
+		alignItems: 'center',
+		overflow: 'hidden',
+		borderWidth: 1,
+		height: 72,
+		width: 72,
 	},
 	logoImage: {
-		width: "100%",
-		height: "100%",
+		height: '100%',
+		width: '100%',
 	},
 	logoButton: {
-		width: 180,
 		paddingVertical: spacing.sm,
+		width: 180,
 	},
 });

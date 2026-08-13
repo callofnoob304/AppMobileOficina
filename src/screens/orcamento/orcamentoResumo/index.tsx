@@ -1,27 +1,27 @@
-import { NavigationProp, RouteProp, StackActions, useNavigation, useRoute } from "@react-navigation/native";
-import { Button, Container, Content, Label, Card, ScreenHeader, StepIndicator } from "@components";
-import { View, Alert, ActivityIndicator } from "react-native";
-import { OrcamentoStackParamList } from "src/navigation/types";
-import { OrcamentoService } from "src/services/orcamentoService";
-import { OrcamentoItem } from "src/types/orcamento";
-import { formatBRL } from "src/utils/format";
-import { colors } from "src/styles/colors";
-import { styles } from "./styles";
-import React, { useState } from "react";
+import { NavigationProp, RouteProp, StackActions, useNavigation, useRoute } from '@react-navigation/native';
+import { Button, Container, Content, Label, Card, ScreenHeader, StepIndicator } from '@components';
+import { OrcamentoService } from 'src/services/orcamentoService';
+import { OrcamentoStackParamList } from 'src/navigation/types';
+import { View, Alert, ActivityIndicator } from 'react-native';
+import { OrcamentoItem } from 'src/types/orcamento';
+import { formatBRL } from 'src/utils/format';
+import { colors } from 'src/styles/colors';
+import React, { useState } from 'react';
+import { styles } from './styles';
 
 function InfoRow({ label, value }: { label: string; value?: string }) {
 	if (!value) return null;
 	return (
 		<View style={styles.infoRow}>
 			<Label muted label={label} style={{ fontSize: 14 }} />
-			<Label label={value} style={{ fontSize: 14, flex: 1, textAlign: "right" }} />
+			<Label label={value} style={{ fontSize: 14, flex: 1, textAlign: 'right' }} />
 		</View>
 	);
 }
 
 export default function OrcamentoResumo() {
 	const navigator = useNavigation<NavigationProp<OrcamentoStackParamList>>();
-	const { orcamentoId, cliente, veiculo, itens } = useRoute<RouteProp<OrcamentoStackParamList, "OrcamentoResumo">>().params;
+	const { orcamentoId, cliente, veiculo, itens } = useRoute<RouteProp<OrcamentoStackParamList, 'OrcamentoResumo'>>().params;
 	const [salvando, setSalvando] = useState(false);
 	const editando = !!orcamentoId;
 
@@ -37,32 +37,32 @@ export default function OrcamentoResumo() {
 			navigator.dispatch(StackActions.popToTop());
 
 			Alert.alert(
-				editando ? "Orçamento atualizado!" : "Orçamento salvo!",
+				editando ? 'Orçamento atualizado!' : 'Orçamento salvo!',
 				editando
 					? `Orçamento Nº ${orcamento.numero} foi atualizado com sucesso.`
-					: `Orçamento Nº ${orcamento.numero} de ${cliente.nome} foi salvo. Ele ficará disponível por 10 dias.`
+					: `Orçamento Nº ${orcamento.numero} de ${cliente.nome} foi salvo. Ele ficará disponível por 10 dias.`,
 			);
 		} catch {
 			setSalvando(false);
-			Alert.alert("Erro", "Não foi possível salvar o orçamento. Tente novamente.");
+			Alert.alert('Erro', 'Não foi possível salvar o orçamento. Tente novamente.');
 		}
 	}
 
 	return (
 		<Container>
 			<ScreenHeader title="Resumo" subtitle="Etapa 3 · Confira e conclua" onBack={() => navigator.goBack()} />
-			<StepIndicator current={3} total={3} labels={["Dados", "Serviços", "Resumo"]} />
+			<StepIndicator current={3} total={3} labels={['Dados', 'Serviços', 'Resumo']} />
 
 			<Content style={{ gap: 16, paddingBottom: 120 }}>
 				<Card style={{ gap: 6 }} highlight>
-					<Label label="Cliente" style={{ fontWeight: "700", marginBottom: 4 }} />
+					<Label label="Cliente" style={{ fontWeight: '700', marginBottom: 4 }} />
 					<InfoRow label="Nome" value={cliente.nome} />
 					<InfoRow label="Telefone" value={cliente.telefone} />
 					<InfoRow label="CPF/CNPJ" value={cliente.cpfCnpj} />
 				</Card>
 
 				<Card style={{ gap: 6 }} highlight>
-					<Label label="Veículo" style={{ fontWeight: "700", marginBottom: 4 }} />
+					<Label label="Veículo" style={{ fontWeight: '700', marginBottom: 4 }} />
 					<InfoRow label="Veículo" value={veiculo.nome} />
 					<InfoRow label="Modelo" value={veiculo.modelo} />
 					<InfoRow label="Ano" value={veiculo.ano} />
@@ -71,14 +71,14 @@ export default function OrcamentoResumo() {
 				</Card>
 
 				<Card style={{ gap: 4 }}>
-					<Label label={`Itens (${itens.length})`} style={{ fontWeight: "700", marginBottom: 6 }} />
+					<Label label={`Itens (${itens.length})`} style={{ fontWeight: '700', marginBottom: 6 }} />
 					{itens.map((item: OrcamentoItem) => (
 						<View key={item.id} style={styles.itemRow}>
 							<View style={{ flex: 1 }}>
 								<Label label={item.descricao} style={{ fontSize: 14 }} />
 								<Label muted label={`${item.quantidade} × ${formatBRL(item.valorUnitario)}`} style={{ fontSize: 12 }} />
 							</View>
-							<Label label={formatBRL(item.quantidade * item.valorUnitario)} style={{ fontSize: 14, fontWeight: "600" }} />
+							<Label label={formatBRL(item.quantidade * item.valorUnitario)} style={{ fontSize: 14, fontWeight: '600' }} />
 						</View>
 					))}
 				</Card>
@@ -90,7 +90,7 @@ export default function OrcamentoResumo() {
 			</Content>
 
 			<Button
-				title={salvando ? "Salvando..." : editando ? "Salvar alterações" : "Salvar orçamento"}
+				title={salvando ? 'Salvando...' : editando ? 'Salvar alterações' : 'Salvar orçamento'}
 				onPress={concluir}
 				disabled={salvando}
 				icon={salvando ? <ActivityIndicator color={colors.text.inverse} /> : undefined}

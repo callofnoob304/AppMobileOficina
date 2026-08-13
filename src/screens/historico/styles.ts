@@ -1,9 +1,9 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
 	empty: {
-		alignItems: "center",
-		gap: 10,
+		alignItems: 'center',
 		paddingVertical: 60,
+		gap: 10,
 	},
 });

@@ -1,37 +1,36 @@
-import { colors } from "./colors";
+import { colors } from './colors';
 
-// Tokens de espaçamento, raio e tipografia usados em todo o app.
 export const spacing = {
-  xs: 4,
-  sm: 8,
-  md: 12,
-  lg: 16,
-  xl: 24,
-  xxl: 32,
+	xxl: 32,
+	md: 12,
+	lg: 16,
+	xl: 24,
+	xs: 4,
+	sm: 8,
 };
 
 export const radius = {
-  sm: 8,
-  md: 12,
-  lg: 16,
-  xl: 24,
-  full: 999,
+	full: 999,
+	md: 12,
+	lg: 16,
+	xl: 24,
+	sm: 8,
 };
 
 export const fontSize = {
-  xs: 12,
-  sm: 14,
-  md: 16,
-  lg: 20,
-  xl: 24,
-  xxl: 30,
+	xxl: 30,
+	xs: 12,
+	sm: 14,
+	md: 16,
+	lg: 20,
+	xl: 24,
 };
 
 export const theme = {
-  colors,
-  spacing,
-  radius,
-  fontSize,
+	fontSize,
+	spacing,
+	colors,
+	radius,
 };
 
 export { colors };

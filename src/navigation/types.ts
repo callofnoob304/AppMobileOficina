@@ -1,4 +1,4 @@
-import { Cliente, Veiculo, OrcamentoItem } from "../types/orcamento";
+import { Cliente, Veiculo, OrcamentoItem } from '../types/orcamento';
 
 export type OrcamentoStackParamList = {
 	Home: undefined;

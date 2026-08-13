@@ -1,8 +1,8 @@
-import { View, Text, TouchableOpacity } from "react-native";
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { colors } from "src/styles/colors";
-import { styles } from "./styles";
-import React from "react";
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { View, Text, TouchableOpacity } from 'react-native';
+import { colors } from 'src/styles/colors';
+import { styles } from './styles';
+import React from 'react';
 
 interface Props {
 	title: string;

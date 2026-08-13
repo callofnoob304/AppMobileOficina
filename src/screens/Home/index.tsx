@@ -1,17 +1,17 @@
-import { NavigationProp, useFocusEffect, useNavigation } from "@react-navigation/native";
-import { View, Image, ScrollView, TouchableOpacity, RefreshControl } from "react-native";
-import { Button, Card, Container, Label, OrcamentoCard } from "@components";
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { OrcamentoStackParamList } from "src/navigation/types";
-import { OrcamentoService } from "src/services/orcamentoService";
-import { StorageService } from "src/services/storageService";
-import { DadosOficina, OFICINA_PADRAO } from "src/types/oficina";
-import { Orcamento } from "src/types/orcamento";
-import { formatBRL } from "src/utils/format";
-import { colors } from "src/styles/colors";
-import { spacing } from "src/styles/theme";
-import { styles } from "./styles";
-import React, { useCallback, useState } from "react";
+import { NavigationProp, useFocusEffect, useNavigation } from '@react-navigation/native';
+import { View, Image, ScrollView, TouchableOpacity, RefreshControl } from 'react-native';
+import { Button, Card, Container, Label, OrcamentoCard } from '@components';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { OrcamentoService } from 'src/services/orcamentoService';
+import { DadosOficina, OFICINA_PADRAO } from 'src/types/oficina';
+import { OrcamentoStackParamList } from 'src/navigation/types';
+import { StorageService } from 'src/services/storageService';
+import React, { useCallback, useState } from 'react';
+import { Orcamento } from 'src/types/orcamento';
+import { formatBRL } from 'src/utils/format';
+import { colors } from 'src/styles/colors';
+import { spacing } from 'src/styles/theme';
+import { styles } from './styles';
 
 export default function Home() {
 	const navigator = useNavigation<NavigationProp<OrcamentoStackParamList>>();
@@ -21,12 +21,8 @@ export default function Home() {
 
 	const carregar = useCallback(async () => {
 		setCarregando(true);
-		const [lista, salvo] = await Promise.all([
-			OrcamentoService.listar(),
-			StorageService.get("oficina"),
-		]);
-		// A Home mostra apenas orçamentos ainda não concluídos; os concluídos ficam no Histórico.
-		setOrcamentos(lista.filter((o) => o.status !== "Concluído"));
+		const [lista, salvo] = await Promise.all([OrcamentoService.listar(), StorageService.get('oficina')]);
+		setOrcamentos(lista.filter(o => o.status !== 'Concluído'));
 		setOficina(salvo ? { ...OFICINA_PADRAO, ...salvo } : OFICINA_PADRAO);
 		setCarregando(false);
 	}, []);
@@ -34,14 +30,14 @@ export default function Home() {
 	useFocusEffect(
 		useCallback(() => {
 			carregar();
-		}, [carregar])
+		}, [carregar]),
 	);
 
 	const total = orcamentos.reduce((acc, o) => acc + o.total, 0);
 	const recentes = orcamentos.slice(0, 5);
 
 	function irParaHistorico() {
-		navigator.getParent()?.navigate("Histórico" as never);
+		navigator.getParent()?.navigate('Histórico' as never);
 	}
 
 	return (
@@ -53,7 +49,7 @@ export default function Home() {
 			>
 				<View style={styles.header}>
 					<Image
-						source={oficina.logoUri ? { uri: oficina.logoUri } : require("../../assets/icon/play_store_icon_512.png")}
+						source={oficina.logoUri ? { uri: oficina.logoUri } : require('../../assets/icon/play_store_icon_512.png')}
 						style={styles.logo}
 					/>
 					<View style={{ flex: 1 }}>
@@ -79,12 +75,12 @@ export default function Home() {
 
 				<Button
 					title="Novo orçamento"
-					onPress={() => navigator.navigate("OrcamentoClienteVeiculo")}
+					onPress={() => navigator.navigate('OrcamentoClienteVeiculo')}
 					icon={<Icon name="plus-circle-outline" size={20} color={colors.text.inverse} />}
 				/>
 
 				<View style={styles.sectionHeader}>
-					<Label label="Recentes" style={{ fontWeight: "700", fontSize: 18 }} />
+					<Label label="Recentes" style={{ fontWeight: '700', fontSize: 18 }} />
 					{orcamentos.length > 0 && (
 						<TouchableOpacity onPress={irParaHistorico}>
 							<Label label="Ver concluídos" style={{ color: colors.yellow[400], fontSize: 14 }} />
@@ -100,12 +96,8 @@ export default function Home() {
 					</Card>
 				) : (
 					<View style={{ gap: spacing.md }}>
-						{recentes.map((o) => (
-							<OrcamentoCard
-								key={o.id}
-								orcamento={o}
-								onPress={() => navigator.navigate("OrcamentoDetalhe", { id: o.id })}
-							/>
+						{recentes.map(o => (
+							<OrcamentoCard key={o.id} orcamento={o} onPress={() => navigator.navigate('OrcamentoDetalhe', { id: o.id })} />
 						))}
 					</View>
 				)}

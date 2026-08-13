@@ -1,6 +1,6 @@
-import { View, ViewProps, TouchableOpacity } from "react-native";
-import { styles } from "./styles";
-import React from "react";
+import { View, ViewProps, TouchableOpacity } from 'react-native';
+import { styles } from './styles';
+import React from 'react';
 
 type Props = ViewProps & {
 	children?: React.ReactNode;
