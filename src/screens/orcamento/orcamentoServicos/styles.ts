@@ -9,6 +9,11 @@ export const styles = StyleSheet.create({
 		borderBottomWidth: 1,
 		paddingVertical: 12,
 	},
+	rowEditing: {
+		backgroundColor: colors.surfaceAlt,
+		borderRadius: 8,
+		paddingHorizontal: 8,
+	},
 	addButton: {
 		backgroundColor: colors.yellow[400],
 		justifyContent: 'center',

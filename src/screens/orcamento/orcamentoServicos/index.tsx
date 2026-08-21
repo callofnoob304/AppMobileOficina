@@ -14,12 +14,27 @@ export default function OrcamentoServicos() {
 	const navigator = useNavigation<NavigationProp<OrcamentoStackParamList>>();
 	const { orcamentoId, cliente, veiculo, itens: itensIniciais } = useRoute<RouteProp<OrcamentoStackParamList, 'OrcamentoServicos'>>().params;
 
-	const [quantidade, setQuantidade] = React.useState('');
 	const [itens, setItens] = React.useState<OrcamentoItem[]>(itensIniciais ?? []);
-	const [valor, setValor] = React.useState('');
+	const [editandoId, setEditandoId] = React.useState<string | null>(null);
+	const [quantidade, setQuantidade] = React.useState('');
 	const [descricao, setDescricao] = React.useState('');
+	const [valor, setValor] = React.useState('');
 
-	const adicionarItem = () => {
+	const limparFormulario = () => {
+		setDescricao('');
+		setQuantidade('');
+		setValor('');
+		setEditandoId(null);
+	};
+
+	const iniciarEdicao = (item: OrcamentoItem) => {
+		setEditandoId(item.id);
+		setDescricao(item.descricao);
+		setQuantidade(String(item.quantidade));
+		setValor(String(item.valorUnitario).replace('.', ','));
+	};
+
+	const salvarItem = () => {
 		const qtd = quantidade ? Number(quantidade) : 1;
 		const vlr = parseValor(valor);
 
@@ -32,21 +47,28 @@ export default function OrcamentoServicos() {
 			return;
 		}
 
-		const novoItem: OrcamentoItem = {
-			id: `${Date.now()}`,
-			descricao: descricao.trim(),
-			quantidade: qtd > 0 ? qtd : 1,
-			valorUnitario: vlr,
-		};
+		if (editandoId) {
+			setItens(prev =>
+				prev.map(i =>
+					i.id === editandoId ? { ...i, descricao: descricao.trim(), quantidade: qtd > 0 ? qtd : 1, valorUnitario: vlr } : i,
+				),
+			);
+		} else {
+			const novoItem: OrcamentoItem = {
+				id: `${Date.now()}`,
+				descricao: descricao.trim(),
+				quantidade: qtd > 0 ? qtd : 1,
+				valorUnitario: vlr,
+			};
+			setItens(prev => [...prev, novoItem]);
+		}
 
-		setItens(prev => [...prev, novoItem]);
-		setDescricao('');
-		setQuantidade('');
-		setValor('');
+		limparFormulario();
 	};
 
 	const removerItem = (id: string) => {
 		setItens(prev => prev.filter(i => i.id !== id));
+		if (editandoId === id) limparFormulario();
 	};
 
 	const total = calcularTotal(itens);
@@ -60,12 +82,15 @@ export default function OrcamentoServicos() {
 	}
 
 	const renderItem = ({ item }: { item: OrcamentoItem }) => (
-		<View style={styles.row}>
+		<View style={[styles.row, editandoId === item.id && styles.rowEditing]}>
 			<View style={{ flex: 1 }}>
 				<Label label={item.descricao} />
 				<Label muted label={`${item.quantidade} × ${formatBRL(item.valorUnitario)}`} style={{ fontSize: 13 }} />
 			</View>
 			<Label label={formatBRL(item.quantidade * item.valorUnitario)} style={{ fontWeight: '700' }} />
+			<TouchableOpacity onPress={() => iniciarEdicao(item)} hitSlop={8} style={{ marginLeft: 12 }}>
+				<Icon name="pencil-outline" size={20} color={colors.yellow[400]} />
+			</TouchableOpacity>
 			<TouchableOpacity onPress={() => removerItem(item.id)} hitSlop={8} style={{ marginLeft: 12 }}>
 				<Icon name="trash-can-outline" size={22} color={colors.red[400]} />
 			</TouchableOpacity>
@@ -79,20 +104,43 @@ export default function OrcamentoServicos() {
 
 			<Content style={{ gap: 20, paddingBottom: 120 }}>
 				<Card style={{ gap: 10 }}>
-					<Label label="Adicionar item" style={{ fontWeight: '700' }} />
+					<View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+						<Label label={editandoId ? 'Editar item' : 'Adicionar item'} style={{ fontWeight: '700' }} />
+						{editandoId && (
+							<TouchableOpacity onPress={limparFormulario} hitSlop={8}>
+								<Label label="Cancelar" style={{ fontSize: 13, color: colors.text.muted }} />
+							</TouchableOpacity>
+						)}
+					</View>
 					<Input placeholder="Serviço ou peça" value={descricao} onChangeText={setDescricao} />
 					<View style={{ flexDirection: 'row', gap: 8, alignItems: 'center' }}>
-						<Input style={{ flex: 1 }} placeholder="Qtd" keyboardType="number-pad" value={quantidade} onChangeText={setQuantidade} />
-						<Input style={{ flex: 1.6 }} placeholder="Valor unit." keyboardType="decimal-pad" value={valor} onChangeText={setValor} />
-						<TouchableOpacity style={styles.addButton} onPress={adicionarItem}>
-							<Icon name="plus" size={26} color={colors.text.inverse} />
+						<Input
+							style={{ flex: 1 }}
+							placeholder="Qtd"
+							keyboardType="number-pad"
+							value={quantidade}
+							onChangeText={setQuantidade}
+						/>
+						<Input
+							style={{ flex: 1.6 }}
+							placeholder="Valor unit."
+							keyboardType="decimal-pad"
+							value={valor}
+							onChangeText={setValor}
+						/>
+						<TouchableOpacity style={styles.addButton} onPress={salvarItem}>
+							<Icon name={editandoId ? 'check' : 'plus'} size={26} color={colors.text.inverse} />
 						</TouchableOpacity>
 					</View>
 				</Card>
 
 				<View>
 					<Label label={`Itens (${itens.length})`} style={{ fontWeight: '700', marginBottom: 8 }} />
-					<FlatList data={itens} keyExtractor={item => item.id} renderItem={renderItem} scrollEnabled={false}
+					<FlatList
+						data={itens}
+						keyExtractor={item => item.id}
+						renderItem={renderItem}
+						scrollEnabled={false}
 						ListEmptyComponent={
 							<View style={styles.empty}>
 								<Icon name="clipboard-text-outline" size={32} color={colors.text.muted} />
